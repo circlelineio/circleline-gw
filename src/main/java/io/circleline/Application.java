@@ -1,7 +1,8 @@
 package io.circleline;
 
 import akka.actor.ActorSystem;
-import io.circleline.route.StaticRouter;
+import io.circleline.filter.ActorProcesstor;
+import io.circleline.router.StaticRouter;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
@@ -30,7 +31,7 @@ public class Application {
         context.addRoutes(new RouteBuilder() {
             public void configure() {
                 from("test-jms:queue:test.queue")
-                        .process(new MyProcessor(system))
+                        .process(new ActorProcesstor(system))
                         .to("file://test");
             }
         });

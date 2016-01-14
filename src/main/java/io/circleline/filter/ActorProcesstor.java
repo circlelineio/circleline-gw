@@ -1,4 +1,4 @@
-package io.circleline;
+package io.circleline.filter;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
@@ -9,12 +9,12 @@ import org.apache.camel.Processor;
 /**
  * Created by 1001923 on 16. 1. 5..
  */
-public class MyProcessor implements Processor{
+public class ActorProcesstor implements Processor{
     private ActorRef pingActor;
 
-    public MyProcessor(){}
+    public ActorProcesstor(){}
 
-    public MyProcessor(ActorSystem system){
+    public ActorProcesstor(ActorSystem system){
         pingActor = system.actorOf(PingActor.props());
     }
 

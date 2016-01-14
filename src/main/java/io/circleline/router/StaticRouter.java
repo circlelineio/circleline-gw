@@ -1,4 +1,4 @@
-package io.circleline.route;
+package io.circleline.router;
 
 import io.circleline.ApiPath;
 import io.circleline.Configuration;
