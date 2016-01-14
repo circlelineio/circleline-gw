@@ -1,7 +1,8 @@
-package com.example;
+package io.circleline;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
+import io.circleline.actor.PingActor;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 

@@ -1,8 +1,7 @@
-package com.example;
+package io.circleline.actor;
 
 import akka.actor.UntypedActor;
 import akka.actor.Props;
-import akka.japi.Creator;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
