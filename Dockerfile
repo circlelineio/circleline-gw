@@ -9,4 +9,6 @@ RUN mkdir /app
 ADD ./target/scala-2.11/${APP_NAME}-assembly-${VERSION}.jar /app/
 WORKDIR /app
 
+EXPOSE 9000
+
 CMD ["java","-jar","circleline-gw-assembly-1.0.jar"]

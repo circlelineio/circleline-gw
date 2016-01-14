@@ -41,8 +41,7 @@ public class ApplicationMain {
         // This example app will ping pong 3 times and thereafter terminate the ActorSystem -
         // see counter logic in PingActor
         system.awaitTermination();
-
-        context.stop();
+//        context.stop();
     }
 
 }
