@@ -11,6 +11,7 @@ libraryDependencies ++= Seq(
   // Camel
   "org.apache.camel" % "camel-core" % "2.16.1",
   "org.apache.camel" % "camel-jetty" % "2.16.1",
+  "org.apache.camel" % "camel-http" % "2.16.1",
   // ActiveMQ
   "org.apache.activemq" % "activemq-broker" % "5.13.0",
   "org.apache.activemq" % "activemq-client" % "5.13.0",

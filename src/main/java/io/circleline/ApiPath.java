@@ -21,7 +21,7 @@ public class ApiPath{
         this.bridgeEndpoint = bridgeEndpoint;
     }
 
-//    public String getTargetUrl() {
-//        return targetUrl + "?bridgeEndpoint=" + bridgeEndpoint;
-//    }
+    public String getTargetUrl() {
+        return targetUrl + "?bridgeEndpoint=" + bridgeEndpoint;
+    }
 }
