@@ -1,5 +1,6 @@
 package io.circleline;
 
+import io.circleline.message.ApiPath;
 import org.junit.Test;
 
 import java.util.List;

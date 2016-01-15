@@ -3,6 +3,7 @@ package io.circleline;
 import com.google.common.collect.Lists;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
+import io.circleline.message.ApiPath;
 
 import java.util.List;
 

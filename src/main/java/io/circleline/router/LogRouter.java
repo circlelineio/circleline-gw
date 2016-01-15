@@ -1,8 +1,7 @@
 package io.circleline.router;
 
-import io.circleline.message.ApiPath;
 import io.circleline.Configuration;
-import io.circleline.filter.BlackListFilter;
+import io.circleline.message.ApiPath;
 import org.apache.camel.builder.RouteBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,15 +11,13 @@ import java.util.Iterator;
 /**
  * API Gateway Router
  */
-public class StaticRouter extends RouteBuilder {
-    static Logger LOG = LoggerFactory.getLogger(StaticRouter.class);
+public class LogRouter extends RouteBuilder {
+    static Logger LOG = LoggerFactory.getLogger(LogRouter.class);
 
     private Configuration config;
-    private boolean bridgeEndpoint;
 
-    public StaticRouter(Configuration config){
+    public LogRouter(Configuration config){
         this.config = config;
-        this.bridgeEndpoint = true;
     }
 
     /**
@@ -35,8 +32,7 @@ public class StaticRouter extends RouteBuilder {
             LOG.info("API Path {}", api);
             //camel dsl
             from(api.getListenPath())
-                    .process(new BlackListFilter(config.blackList()))
-                    .to(api.getTargetUrl()+ "?bridgeEndpoint=" + bridgeEndpoint);
+                    .to(api.getTargetUrl());
         }
     }
 }

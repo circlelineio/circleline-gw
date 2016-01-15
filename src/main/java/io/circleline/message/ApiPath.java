@@ -1,4 +1,4 @@
-package io.circleline;
+package io.circleline.message;
 
 import lombok.Data;
 
@@ -19,9 +19,5 @@ public class ApiPath{
         this.listenPath = from;
         this.targetUrl = to;
         this.bridgeEndpoint = bridgeEndpoint;
-    }
-
-    public String getTargetUrl() {
-        return targetUrl + "?bridgeEndpoint=" + bridgeEndpoint;
     }
 }
