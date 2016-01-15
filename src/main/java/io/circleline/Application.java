@@ -36,7 +36,7 @@ public class Application {
             }
         });
 
-        context.addRoutes(new StaticRouter());
+        context.addRoutes(new StaticRouter(new Configuration()));
 
 
 

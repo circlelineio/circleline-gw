@@ -15,7 +15,11 @@ import java.util.Iterator;
 public class StaticRouter extends RouteBuilder {
     static Logger LOG = LoggerFactory.getLogger(StaticRouter.class);
 
-    private Configuration config = new Configuration();
+    private Configuration config;
+
+    public StaticRouter(Configuration config){
+        this.config = config;
+    }
 
     /**
      * API Gateway 설정정보를 기반으로 Camel Route 구성.
