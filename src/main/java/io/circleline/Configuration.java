@@ -16,6 +16,7 @@ public class Configuration {
     static final String ROUTES_APIS = "routes.apis";
     static final String LISTEN_PATH = "listenPath";
     static final String TARGET_URL = "targetUrl";
+    static final String RATE_LIMIT = "rateLimit";
 
     private final Config conf;
 
@@ -48,13 +49,18 @@ public class Configuration {
         return conf.getStringList(ROUTES_BLACKLIST);
     }
 
+    public long rateLimit(){
+        return conf.hasPath(RATE_LIMIT) ? conf.getLong(RATE_LIMIT) : 0;
+    }
+
     public List<ApiPath> apiList(){
         List<ApiPath> apiPaths = Lists.newArrayList();
         final List<? extends Config> configList = conf.getConfigList(ROUTES_APIS);
         configList.forEach(config -> {
             apiPaths.add(new ApiPath(
                     config.getString(LISTEN_PATH),
-                    config.getString(TARGET_URL)));
+                    config.getString(TARGET_URL),
+                    config.hasPath(RATE_LIMIT) ? config.getLong(RATE_LIMIT) : rateLimit()));
         });
         return apiPaths;
     }
