@@ -4,12 +4,14 @@ import com.google.common.collect.Lists;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import io.circleline.message.ApiPath;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 /**
  * Created by 1001923 on 16. 1. 14..
  */
+@Component
 public class Configuration {
     static final String ROUTES_WHITELIST = "routes.whitelist";
     static final String ROUTES_BLACKLIST = "routes.blacklist";

@@ -29,6 +29,7 @@ public class JmsTest {
                         .to("file://target/test");
             }
         });
+
         context.start();
         //when
         ProducerTemplate template = context.createProducerTemplate();

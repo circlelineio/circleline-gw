@@ -3,13 +3,17 @@ package io.circleline;
 import akka.actor.ActorSystem;
 import org.apache.camel.CamelContext;
 import org.apache.camel.impl.DefaultCamelContext;
+import org.apache.camel.main.Main;
 
 /**
  * Created by 1001923 on 16. 1. 14..
  */
 public class Application {
     public static void main(String[] args) throws Exception {
-        run();
+        Main main = new Main();
+        main.enableHangupSupport();
+        main.run();
+//        run();
     }
 
     public static void run() throws Exception{
