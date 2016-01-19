@@ -47,7 +47,8 @@ public class RateLimitChecker {
     }
 
     public void receive(String api) {
-        rateLimitInfos.get(api).increment();
+        if(rateLimitInfos.containsKey(api))
+            rateLimitInfos.get(api).increment();
     }
 
     private void startScheduler(){
