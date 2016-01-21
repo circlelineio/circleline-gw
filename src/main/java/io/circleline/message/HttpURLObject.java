@@ -5,33 +5,40 @@ package io.circleline.message;
  */
 public class HttpURLObject implements URLObject {
     private String url;
-    private boolean bridgeEndpoint;
 
-    public static HttpURLObject build(){
-        return new HttpURLObject();
+    public HttpURLObject(String url){
+        this.url = url;
     }
 
     @Override
-    public String fromUrl(){
-        return url;
+    public String fromUrl() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(withProtocol());
+        sb.append(withWildCard(url));
+        return sb.toString();
     }
 
-    @Override
-    public String toUrl(){
-        if(bridgeEndpoint) {
-            return url + "?bridgeEndpoint=" + bridgeEndpoint;
-        }else{
-            return url;
+    private String withProtocol(){
+        return "jetty:";
+    }
+
+    private String withWildCard(String fromUrl){
+        if(fromUrl.endsWith("/*")){
+            return fromUrl.replace("/*","?matchOnUriPrefix=true");
         }
+        return fromUrl;
     }
 
-    public HttpURLObject withUrl(String url){
-        this.url=url;
-        return this;
+    @Override
+    public String toUrl() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(url);
+        sb.append(withBridgeEndpoint());
+        return sb.toString();
     }
 
-    public HttpURLObject withBridgeEndpoint(boolean bridgeEndpoint){
-        this.bridgeEndpoint = bridgeEndpoint;
-        return this;
+    private String withBridgeEndpoint(){
+        return "?bridgeEndpoint=true";
     }
+
 }

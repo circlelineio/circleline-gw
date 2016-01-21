@@ -1,10 +1,12 @@
 package io.circleline.message;
 
+import io.circleline.util.ReflectionUtil;
+import io.circleline.util.URLUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by 1001923 on 16. 1. 21..
@@ -12,22 +14,36 @@ import java.net.URL;
 public class URLBuilder {
     static Logger LOG = LoggerFactory.getLogger(HttpURLObject.class);
     private static final String HTTP = "http";
+    private static final String TCP = "tcp";
 
-    private ApiPath apiPath;
     private URLObject fromUrlObject;
     private URLObject toUrlObject;
+
+    private static final Map<String,Class<?>> URL_OBJECT_MAP =
+            Collections.unmodifiableMap(new HashMap(){
+                {
+                    put(HTTP,HttpURLObject.class);
+                    put(TCP,TCPURLObject.class);
+                }
+            });
+
+    private static URLObject getURLObject(String url){
+        String protocol = URLUtil.getProtocol(url);
+        if(!URL_OBJECT_MAP.containsKey(protocol)){
+            throw new IllegalArgumentException("invalid protocol");
+        }
+        return ReflectionUtil.newInstance(URL_OBJECT_MAP.get(protocol),url);
+    }
 
     /**
      *
      * @param apiPath
-     * @param bridgeEndpoint
      * @return
      */
-    public static URLBuilder build(ApiPath apiPath, boolean bridgeEndpoint){
+    public static URLBuilder build(ApiPath apiPath){
         final URLBuilder urlBuilder = new URLBuilder();
-        urlBuilder.apiPath = apiPath;
-        urlBuilder.fromUrlObject = urlBuilder.fromUrlObject();
-        urlBuilder.toUrlObject = urlBuilder.toUrlObject(bridgeEndpoint);
+        urlBuilder.fromUrlObject = getURLObject(apiPath.getListenPath());
+        urlBuilder.toUrlObject = getURLObject(apiPath.getTargetUrl());
         return urlBuilder;
     }
 
@@ -38,30 +54,5 @@ public class URLBuilder {
         return toUrlObject.toUrl();
     }
 
-    private URLObject fromUrlObject(){
-        try {
-            URL aURL = new URL(apiPath.getListenPath());
-            LOG.debug(aURL.getProtocol());
-            switch (aURL.getProtocol()){
-                case HTTP:
-                    return new HttpURLObject().withUrl(apiPath.getListenPath());
-            }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        return new TCPURLObject();
-    }
-    private URLObject toUrlObject(boolean bridgeEndpoint){
-        try {
-            URL aURL = new URL(apiPath.getListenPath());
-            LOG.debug(aURL.getProtocol());
-            switch (aURL.getProtocol()){
-                case HTTP:
-                    return new HttpURLObject().withUrl(apiPath.getTargetUrl()).withBridgeEndpoint(bridgeEndpoint);
-            }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        return new TCPURLObject();
-    }
+    private URLBuilder(){}
 }

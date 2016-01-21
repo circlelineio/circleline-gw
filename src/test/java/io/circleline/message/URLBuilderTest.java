@@ -14,7 +14,7 @@ public class URLBuilderTest {
         ApiPath aPiPath = new ApiPath("http://0.0.0.0:8080/acme/ping",
                 "http://localhost:9000/v1/ping");
         //when
-        URLBuilder sut = URLBuilder.build(aPiPath,false);
+        URLBuilder sut = URLBuilder.build(aPiPath);
         //then
         assertThat(sut).isInstanceOf(URLBuilder.class);
     }
@@ -24,20 +24,20 @@ public class URLBuilderTest {
         //given
         ApiPath aPiPath = new ApiPath("http://0.0.0.0:8080/acme/ping",
                 "http://localhost:9000/v1/ping");
-        URLBuilder sut = URLBuilder.build(aPiPath,true);
+        URLBuilder sut = URLBuilder.build(aPiPath);
         //when
         assertThat(sut.fromUrl()).isEqualTo("http://0.0.0.0:8080/acme/ping");
         assertThat(sut.toUrl()).isEqualTo("http://localhost:9000/v1/ping?bridgeEndpoint=true");
     }
 
-    @Test
-    public void http_bridgeEndpoint_false() throws Exception {
-        //given
-        ApiPath aPiPath = new ApiPath("http://0.0.0.0:8080/acme/ping",
-                "http://localhost:9000/v1/ping");
-        URLBuilder sut = URLBuilder.build(aPiPath,false);
-        //when
-        assertThat(sut.fromUrl()).isEqualTo("http://0.0.0.0:8080/acme/ping");
-        assertThat(sut.toUrl()).isEqualTo("http://localhost:9000/v1/ping");
-    }
+//    @Test
+//    public void http_bridgeEndpoint_false() throws Exception {
+//        //given
+//        ApiPath aPiPath = new ApiPath("http://0.0.0.0:8080/acme/ping",
+//                "http://localhost:9000/v1/ping");
+//        URLBuilder sut = URLBuilder.build(aPiPath,false);
+//        //when
+//        assertThat(sut.fromUrl()).isEqualTo("http://0.0.0.0:8080/acme/ping");
+//        assertThat(sut.toUrl()).isEqualTo("http://localhost:9000/v1/ping");
+//    }
 }
