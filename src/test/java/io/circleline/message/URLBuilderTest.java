@@ -20,7 +20,7 @@ public class URLBuilderTest {
     }
 
     @Test
-    public void bridgeEndpoint_true() throws Exception {
+    public void http_bridgeEndpoint_true() throws Exception {
         //given
         ApiPath aPiPath = new ApiPath("http://0.0.0.0:8080/acme/ping",
                 "http://localhost:9000/v1/ping");
@@ -31,7 +31,7 @@ public class URLBuilderTest {
     }
 
     @Test
-    public void bridgeEndpoint_false() throws Exception {
+    public void http_bridgeEndpoint_false() throws Exception {
         //given
         ApiPath aPiPath = new ApiPath("http://0.0.0.0:8080/acme/ping",
                 "http://localhost:9000/v1/ping");

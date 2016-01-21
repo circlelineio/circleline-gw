@@ -1,58 +1,67 @@
 package io.circleline.message;
 
-import com.google.common.net.HostAndPort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Created by 1001923 on 16. 1. 21..
  */
 public class URLBuilder {
     static Logger LOG = LoggerFactory.getLogger(HttpURLObject.class);
+    private static final String HTTP = "http";
 
     private ApiPath apiPath;
     private URLObject fromUrlObject;
     private URLObject toUrlObject;
 
     /**
-     * TODO 프로토콜을 분석해서 그에 맞는 URLObject를 만들어줘야 한다. 현재는 HTTP로 고정했음.
      *
-     * @param aPiPath
+     * @param apiPath
      * @param bridgeEndpoint
      * @return
      */
-    public static URLBuilder build(ApiPath aPiPath, boolean bridgeEndpoint){
+    public static URLBuilder build(ApiPath apiPath, boolean bridgeEndpoint){
         final URLBuilder urlBuilder = new URLBuilder();
-        urlBuilder.apiPath = aPiPath;
-        urlBuilder.fromUrlObject = new HttpURLObject().withUrl(aPiPath.getListenPath());
-        urlBuilder.toUrlObject = new HttpURLObject().withUrl(aPiPath.getTargetUrl()).withBridgeEndpoint(bridgeEndpoint);
+        urlBuilder.apiPath = apiPath;
+        urlBuilder.fromUrlObject = urlBuilder.fromUrlObject();
+        urlBuilder.toUrlObject = urlBuilder.toUrlObject(bridgeEndpoint);
         return urlBuilder;
     }
 
     public String fromUrl(){
         return fromUrlObject.fromUrl();
     }
-
     public String toUrl(){
         return toUrlObject.toUrl();
     }
 
-    public void analyze(){
-        final String listenPath = apiPath.getListenPath();
-        final HostAndPort hostAndPort = HostAndPort.fromString(listenPath);
-        final String hostText = hostAndPort.getHostText();
-        final int port = hostAndPort.getPort();
-
-        LOG.debug(hostText);
-        LOG.debug(""+port);
-
+    private URLObject fromUrlObject(){
+        try {
+            URL aURL = new URL(apiPath.getListenPath());
+            LOG.debug(aURL.getProtocol());
+            switch (aURL.getProtocol()){
+                case HTTP:
+                    return new HttpURLObject().withUrl(apiPath.getListenPath());
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return new TCPURLObject();
     }
-
-
-    //        final String endpoint = fromNullable(getenv(EBOOKAPI_HOST)).or(defaultEndPoint());
-//        final String stripped = endpoint.replaceAll(".*://", "");
-//        final HostAndPort hostAndPort = HostAndPort.fromString(stripped);
-//        final String hostText = hostAndPort.getHostText();
-//        final int port = hostAndPort.getPortOrDefault(DEFAULT_PORT);
-//        final String address = isNullOrEmpty(hostText) ? DEFAULT_HOST : hostText;
+    private URLObject toUrlObject(boolean bridgeEndpoint){
+        try {
+            URL aURL = new URL(apiPath.getListenPath());
+            LOG.debug(aURL.getProtocol());
+            switch (aURL.getProtocol()){
+                case HTTP:
+                    return new HttpURLObject().withUrl(apiPath.getTargetUrl()).withBridgeEndpoint(bridgeEndpoint);
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return new TCPURLObject();
+    }
 }
