@@ -37,13 +37,13 @@ public class URLBuilder {
 
     /**
      *
-     * @param apiPath
+     * @param apiEndpoint
      * @return
      */
-    public static URLBuilder build(ApiPath apiPath){
+    public static URLBuilder build(ApiEndpoint apiEndpoint){
         final URLBuilder urlBuilder = new URLBuilder();
-        urlBuilder.fromUrlObject = getURLObject(apiPath.getListenPath());
-        urlBuilder.toUrlObject = getURLObject(apiPath.getTargetUrl());
+        urlBuilder.fromUrlObject = getURLObject(apiEndpoint.getListenPath());
+        urlBuilder.toUrlObject = getURLObject(apiEndpoint.getTargetUrl());
         return urlBuilder;
     }
 

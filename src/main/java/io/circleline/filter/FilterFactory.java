@@ -1,12 +1,12 @@
 package io.circleline.filter;
 
 import io.circleline.Configuration;
-import io.circleline.message.ApiPath;
+import io.circleline.message.ApiEndpoint;
 import org.apache.camel.Processor;
 
 /**
  * Created by 1002515 on 2016. 1. 18..
  */
 public interface FilterFactory {
-    public Processor getFilter(Configuration conf, ApiPath apiPath);
+    public Processor getFilter(Configuration conf, ApiEndpoint apiEndpoint);
 }

@@ -1,7 +1,7 @@
 package io.circleline.filter.ratelimit;
 
 import com.google.common.collect.Lists;
-import io.circleline.message.ApiPath;
+import io.circleline.message.ApiEndpoint;
 
 import java.util.List;
 import java.util.Map;
@@ -32,7 +32,7 @@ public class RateLimitChecker {
         return listeners.remove(listener);
     }
 
-    public void addRateLimitApi(ApiPath api){
+    public void addRateLimitApi(ApiEndpoint api){
         if(rateLimitInfos.containsKey(api.getListenPath())){
             rateLimitInfos.remove(api.getListenPath());
         }

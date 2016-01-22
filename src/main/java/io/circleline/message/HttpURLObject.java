@@ -12,10 +12,18 @@ public class HttpURLObject implements URLObject {
 
     @Override
     public String fromUrl() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(withProtocol());
-        sb.append(withWildCard(url));
-        return sb.toString();
+        return new StringBuilder()
+                .append(withProtocol())
+                .append(withWildCard(url))
+                .toString();
+    }
+
+    @Override
+    public String toUrl() {
+        return new StringBuilder()
+                .append(url)
+                .append(withBridgeEndpoint())
+                .toString();
     }
 
     private String withProtocol(){
@@ -27,14 +35,6 @@ public class HttpURLObject implements URLObject {
             return fromUrl.replace("/*","?matchOnUriPrefix=true");
         }
         return fromUrl;
-    }
-
-    @Override
-    public String toUrl() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(url);
-        sb.append(withBridgeEndpoint());
-        return sb.toString();
     }
 
     private String withBridgeEndpoint(){

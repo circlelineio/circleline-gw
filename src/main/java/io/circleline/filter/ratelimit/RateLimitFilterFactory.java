@@ -2,7 +2,7 @@ package io.circleline.filter.ratelimit;
 
 import io.circleline.Configuration;
 import io.circleline.filter.FilterFactory;
-import io.circleline.message.ApiPath;
+import io.circleline.message.ApiEndpoint;
 import org.apache.camel.Processor;
 
 /**
@@ -18,10 +18,10 @@ public class RateLimitFilterFactory implements FilterFactory {
     }
 
     @Override
-    public Processor getFilter(Configuration conf, ApiPath apiPath){
+    public Processor getFilter(Configuration conf, ApiEndpoint apiEndpoint){
         //TODO Singleton으로 관리필요.
         RateLimitChecker rateLimitChecker = new RateLimitChecker();
-        rateLimitChecker.addRateLimitApi(apiPath);
+        rateLimitChecker.addRateLimitApi(apiEndpoint);
         return new RateLimitFilter(
                 new RateLimitTrafficMonitor(
                         rateLimitChecker

@@ -3,7 +3,8 @@ package io.circleline;
 import com.google.common.collect.Lists;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import io.circleline.message.ApiPath;
+import io.circleline.message.ApiEndpoint;
+import io.circleline.message.RestAPI;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -55,15 +56,19 @@ public class Configuration {
         return conf.hasPath(RATE_LIMIT) ? conf.getLong(RATE_LIMIT) : 0;
     }
 
-    public List<ApiPath> apiList(){
-        List<ApiPath> apiPaths = Lists.newArrayList();
+    public List<ApiEndpoint> apiList(){
+        List<ApiEndpoint> apiEndpoints = Lists.newArrayList();
         final List<? extends Config> configList = conf.getConfigList(ROUTES_APIS);
         configList.forEach(config -> {
-            apiPaths.add(new ApiPath(
-                    config.getString(LISTEN_PATH),
+            apiEndpoints.add(new ApiEndpoint(config.getString(LISTEN_PATH),
                     config.getString(TARGET_URL),
                     config.hasPath(RATE_LIMIT) ? config.getLong(RATE_LIMIT) : rateLimit()));
         });
-        return apiPaths;
+        return apiEndpoints;
+    }
+
+    public RestAPI restAPI(){
+        RestAPI restAPI = new RestAPI(apiList(),rateLimit());
+        return restAPI;
     }
 }

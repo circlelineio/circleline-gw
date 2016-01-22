@@ -1,6 +1,7 @@
 package io.circleline;
 
-import io.circleline.message.ApiPath;
+import io.circleline.message.ApiEndpoint;
+import io.circleline.message.RestAPI;
 import org.junit.Test;
 
 import java.util.List;
@@ -11,25 +12,36 @@ import static org.fest.assertions.Assertions.assertThat;
  * Created by 1001923 on 16. 1. 14..
  */
 public class ConfigurationTest {
+
     @Test
-    public void load() throws Exception{
-        final Configuration sut = new Configuration();
+    public void restApi() throws Exception{
+        //given
+        final Configuration sut = new Configuration("restapi");
+        //when
+        final RestAPI restAPI = sut.restAPI();
+        //then
+        assertThat(restAPI).isInstanceOf(RestAPI.class);
+        assertThat(restAPI.getApiEndpoints()).isNotEmpty();
+        assertThat(restAPI.getRateLimit()).isEqualTo(0l);
     }
 
     @Test
-    public void whiteList() throws Exception{
+    public void apiEndpoint() throws Exception{
         //given
-        final Configuration sut = new Configuration();
+        final Configuration sut = new Configuration("apiendpoint");
         //when
-        final List<String> whiteList = sut.whiteList();
+        final List<ApiEndpoint> apiEndpoints = sut.apiList();
         //then
-        assertThat(whiteList).isNotEmpty();
+        assertThat(apiEndpoints).isNotEmpty();
+        final ApiEndpoint apiEndpoint = apiEndpoints.get(0);
+        assertThat(apiEndpoint.getListenPath()).isEqualTo("jetty:http://0.0.0.0:8080/v1/acme/ping");
+        assertThat(apiEndpoint.getTargetUrl()).startsWith("http://localhost:9000/v1/ping");
     }
 
     @Test
     public void blackList() throws Exception{
         //given
-        final Configuration sut = new Configuration();
+        final Configuration sut = new Configuration("blackwhitelist");
         //when
         final List<String> blackList = sut.blackList();
         //then
@@ -37,15 +49,17 @@ public class ConfigurationTest {
     }
 
     @Test
-    public void apiList() throws Exception{
+    public void whiteList() throws Exception{
         //given
-        final Configuration sut = new Configuration();
+        final Configuration sut = new Configuration("blackwhitelist");
         //when
-        final List<ApiPath> apiPaths = sut.apiList();
+        final List<String> whiteList = sut.whiteList();
         //then
-        assertThat(apiPaths).isNotEmpty();
-        final ApiPath apiPath = apiPaths.get(0);
-        assertThat(apiPath.getListenPath()).isEqualTo("jetty:http://0.0.0.0:8080/v1/circleline/api1");
-        assertThat(apiPath.getTargetUrl()).startsWith("http://localhost:9000/service1/api1");
+        assertThat(whiteList).isNotEmpty();
+    }
+
+    @Test
+    public void load() throws Exception{
+        new Configuration();
     }
 }

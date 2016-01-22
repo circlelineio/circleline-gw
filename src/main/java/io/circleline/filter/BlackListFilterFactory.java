@@ -1,7 +1,7 @@
 package io.circleline.filter;
 
 import io.circleline.Configuration;
-import io.circleline.message.ApiPath;
+import io.circleline.message.ApiEndpoint;
 import org.apache.camel.Processor;
 
 /**
@@ -16,7 +16,7 @@ public class BlackListFilterFactory implements FilterFactory {
     }
 
     @Override
-    public Processor getFilter(Configuration conf, ApiPath apiPath){
+    public Processor getFilter(Configuration conf, ApiEndpoint apiEndpoint){
         return new BlackListFilter(conf.blackList());
     }
 }

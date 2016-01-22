@@ -10,8 +10,10 @@ import static org.junit.Assert.*;
 public class URLUtilTest {
 
     @Test
-    public void testGetProtocol() throws Exception {
+    public void getProtocol() throws Exception {
+        //given,when
         String protocol = URLUtil.getProtocol("http://localhost");
+        //then
         assertEquals(protocol,"http");
     }
 }
