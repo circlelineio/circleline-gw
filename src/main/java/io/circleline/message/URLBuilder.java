@@ -40,16 +40,17 @@ public class URLBuilder {
      * @param apiEndpoint
      * @return
      */
-    public static URLBuilder build(ApiEndpoint apiEndpoint){
+    public static URLBuilder build(String fromUrl, String toUrl){
         final URLBuilder urlBuilder = new URLBuilder();
-        urlBuilder.fromUrlObject = getURLObject(apiEndpoint.getListenPath());
-        urlBuilder.toUrlObject = getURLObject(apiEndpoint.getTargetUrl());
+        urlBuilder.fromUrlObject = getURLObject(fromUrl);
+        urlBuilder.toUrlObject = getURLObject(toUrl);
         return urlBuilder;
     }
 
     public String fromUrl(){
         return fromUrlObject.fromUrl();
     }
+
     public String toUrl(){
         return toUrlObject.toUrl();
     }

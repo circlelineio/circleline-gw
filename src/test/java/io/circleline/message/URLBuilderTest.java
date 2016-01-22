@@ -11,10 +11,10 @@ public class URLBuilderTest {
     @Test
     public void build() throws Exception {
         //given
-        ApiEndpoint aPiEndpoint = new ApiEndpoint("http://0.0.0.0:8080/acme/ping",
-                "http://localhost:9000/v1/ping");
+        String fromUrl = "http://0.0.0.0:8080/acme/ping";
+        String toUrl = "http://localhost:9000/v1/ping";
         //when
-        URLBuilder sut = URLBuilder.build(aPiEndpoint);
+        URLBuilder sut = URLBuilder.build(fromUrl,toUrl);
         //then
         assertThat(sut).isInstanceOf(URLBuilder.class);
     }
@@ -22,9 +22,10 @@ public class URLBuilderTest {
     @Test
     public void httpURLObject() throws Exception {
         //given
-        ApiEndpoint aPiEndpoint = new ApiEndpoint("http://0.0.0.0:8080/acme/ping",
-                "http://localhost:9000/v1/ping");
-        URLBuilder sut = URLBuilder.build(aPiEndpoint);
+        String fromUrl = "http://0.0.0.0:8080/acme/ping";
+        String toUrl = "http://localhost:9000/v1/ping";
+        //when
+        URLBuilder sut = URLBuilder.build(fromUrl,toUrl);
         //when
         assertThat(sut.fromUrl()).isEqualTo("jetty:http://0.0.0.0:8080/acme/ping");
         assertThat(sut.toUrl()).isEqualTo("http://localhost:9000/v1/ping?bridgeEndpoint=true");

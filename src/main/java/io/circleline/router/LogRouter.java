@@ -31,8 +31,8 @@ public class LogRouter extends RouteBuilder {
             ApiEndpoint api = pathIterator.next();
             LOG.info("API Path {}", api);
             //camel dsl
-            from(api.getListenPath())
-                    .to(api.getTargetUrl());
+            from(api.getFromUrl())
+                    .to(api.getToUrl());
         }
     }
 }

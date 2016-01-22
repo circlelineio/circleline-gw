@@ -34,8 +34,8 @@ public class ConfigurationTest {
         //then
         assertThat(apiEndpoints).isNotEmpty();
         final ApiEndpoint apiEndpoint = apiEndpoints.get(0);
-        assertThat(apiEndpoint.getListenPath()).isEqualTo("jetty:http://0.0.0.0:8080/v1/acme/ping");
-        assertThat(apiEndpoint.getTargetUrl()).startsWith("http://localhost:9000/v1/ping");
+        assertThat(apiEndpoint.getFromUrl()).isEqualTo("jetty:http://0.0.0.0:8080/v1/acme/ping");
+        assertThat(apiEndpoint.getToUrl()).startsWith("http://localhost:9000/v1/ping");
     }
 
     @Test

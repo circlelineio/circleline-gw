@@ -5,7 +5,10 @@ import io.circleline.Configuration;
 import io.circleline.message.ApiEndpoint;
 import io.circleline.filter.BlackListFilterFactory;
 import io.circleline.filter.ratelimit.RateLimitFilterFactory;
+import io.circleline.message.RestAPI;
+import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.model.RouteDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +24,11 @@ public class StaticRouter extends RouteBuilder {
     static Logger LOG = LoggerFactory.getLogger(StaticRouter.class);
     @Autowired
     private Configuration config;
-    private boolean bridgeEndpoint;
 
     public StaticRouter(){}
 
     public StaticRouter(Configuration config){
         this.config = config;
-        this.bridgeEndpoint = true;
     }
 
     /**
@@ -36,15 +37,32 @@ public class StaticRouter extends RouteBuilder {
      */
     @Override
     public void configure() throws Exception {
-        Iterator<ApiEndpoint> pathIterator = config.apiList().iterator();
+        RestAPI api = config.restAPI();
+        Iterator<ApiEndpoint> pathIterator = api.getApiEndpoints().iterator();
+
         while (pathIterator.hasNext()) {
-            ApiEndpoint api = pathIterator.next();
-            LOG.info("API Path {}", api);
+            ApiEndpoint apiEndpoint = pathIterator.next();
+            LOG.info("API Endpoint {}", apiEndpoint);
             //camel dsl
-            from(api.getListenPath())
-                    .process(RateLimitFilterFactory.getInstance().getFilter(config, api))
-                    .process(BlackListFilterFactory.getInstance().getFilter(config, api))
-                    .to(api.getTargetUrl() + "?bridgeEndpoint=" + bridgeEndpoint);
+            from(apiEndpoint.getFromUrl())
+                    .process(RateLimitFilterFactory.getInstance().getFilter(config, apiEndpoint))
+                    .process(BlackListFilterFactory.getInstance().getFilter(config, apiEndpoint))
+                    .to(apiEndpoint.getToUrl());
+
+//            RouteDefinition routeDefinition = from(apiEndpoint.getFromUrl());
+//            routeDefinition = setFilters(routeDefinition,api);
+//            routeDefinition.to(apiEndpoint.getToUrl());
         }
     }
+
+//    private RouteDefinition setFilters(RouteDefinition routeDef, RestAPI api){
+//        Iterator<Processor> iterator = api.getFilters().iterator();
+//        RouteDefinition currentRouteDef = routeDef;
+//        while(iterator.hasNext()){
+//            Processor apiEndpoint = iterator.next();
+//            currentRouteDef = currentRouteDef.process(apiEndpoint);
+//        }
+//        return currentRouteDef;
+//    }
+
 }

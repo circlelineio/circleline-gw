@@ -33,12 +33,12 @@ public class RateLimitChecker {
     }
 
     public void addRateLimitApi(ApiEndpoint api){
-        if(rateLimitInfos.containsKey(api.getListenPath())){
-            rateLimitInfos.remove(api.getListenPath());
+        if(rateLimitInfos.containsKey(api.getFromUrl())){
+            rateLimitInfos.remove(api.getFromUrl());
         }
-        rateLimitInfos.put(api.getListenPath(),
+        rateLimitInfos.put(api.getFromUrl(),
                 new RateLimitInfo(
-                        api.getListenPath(),
+                        api.getFromUrl(),
                         api.getRateLimit()));
     }
 

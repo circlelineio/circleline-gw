@@ -9,19 +9,18 @@ import lombok.Data;
 public class ApiEndpoint {
     private static final Long DEFAULT_RATELIMIT = 0l;
 
-    private String listenPath;
-    private String targetUrl;
+    private String fromUrl;
+    private String toUrl;
     private Long rateLimit;
 
     public ApiEndpoint(String from, String to) {
-        this.listenPath = from;
-        this.targetUrl = to;
-        this.rateLimit = DEFAULT_RATELIMIT;
+       this(from,to,DEFAULT_RATELIMIT);
     }
 
     public ApiEndpoint(String from, String to, Long rateLimit) {
-        this.listenPath = from;
-        this.targetUrl = to;
+        URLBuilder builder = URLBuilder.build(from,to);
+        this.fromUrl = builder.fromUrl();
+        this.toUrl = builder.toUrl();
         this.rateLimit = rateLimit;
     }
 }

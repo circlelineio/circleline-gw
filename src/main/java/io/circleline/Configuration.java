@@ -17,8 +17,8 @@ public class Configuration {
     static final String ROUTES_WHITELIST = "routes.whitelist";
     static final String ROUTES_BLACKLIST = "routes.blacklist";
     static final String ROUTES_APIS = "routes.apis";
-    static final String LISTEN_PATH = "listenPath";
-    static final String TARGET_URL = "targetUrl";
+    static final String LISTEN_PATH = "fromUrl";
+    static final String TARGET_URL = "toUrl";
     static final String RATE_LIMIT = "rateLimit";
 
     private final Config conf;
