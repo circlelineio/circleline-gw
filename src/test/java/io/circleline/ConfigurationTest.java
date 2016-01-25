@@ -1,7 +1,6 @@
 package io.circleline;
 
 import io.circleline.message.ApiEndpoint;
-import io.circleline.message.RestAPI;
 import org.junit.Test;
 
 import java.util.List;
@@ -12,19 +11,6 @@ import static org.fest.assertions.Assertions.assertThat;
  * Created by 1001923 on 16. 1. 14..
  */
 public class ConfigurationTest {
-
-    @Test
-    public void restApi() throws Exception{
-        //given
-        final Configuration sut = new Configuration("restapi");
-        //when
-        final RestAPI restAPI = sut.restAPI();
-        //then
-        assertThat(restAPI).isInstanceOf(RestAPI.class);
-        assertThat(restAPI.getApiEndpoints()).isNotEmpty();
-        assertThat(restAPI.getRateLimit()).isEqualTo(0l);
-    }
-
     @Test
     public void apiEndpoint() throws Exception{
         //given

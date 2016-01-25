@@ -5,10 +5,8 @@ import io.circleline.Configuration;
 import io.circleline.message.ApiEndpoint;
 import io.circleline.filter.BlackListFilterFactory;
 import io.circleline.filter.ratelimit.RateLimitFilterFactory;
-import io.circleline.message.RestAPI;
-import org.apache.camel.Processor;
+import io.circleline.RestAPI;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.model.RouteDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +35,7 @@ public class StaticRouter extends RouteBuilder {
      */
     @Override
     public void configure() throws Exception {
-        RestAPI api = config.restAPI();
+        RestAPI api = new RestAPI(config);
         Iterator<ApiEndpoint> pathIterator = api.getApiEndpoints().iterator();
 
         while (pathIterator.hasNext()) {

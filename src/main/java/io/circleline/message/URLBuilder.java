@@ -37,7 +37,8 @@ public class URLBuilder {
 
     /**
      *
-     * @param apiEndpoint
+     * @param fromUrl
+     * @param toUrl
      * @return
      */
     public static URLBuilder build(String fromUrl, String toUrl){

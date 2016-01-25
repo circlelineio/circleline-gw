@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import io.circleline.message.ApiEndpoint;
-import io.circleline.message.RestAPI;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -65,10 +64,5 @@ public class Configuration {
                     config.hasPath(RATE_LIMIT) ? config.getLong(RATE_LIMIT) : rateLimit()));
         });
         return apiEndpoints;
-    }
-
-    public RestAPI restAPI(){
-        RestAPI restAPI = new RestAPI(apiList(),rateLimit());
-        return restAPI;
     }
 }
