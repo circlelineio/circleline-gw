@@ -2,10 +2,9 @@ package io.circleline.router;
 
 
 import io.circleline.Configuration;
-import io.circleline.message.ApiEndpoint;
-import io.circleline.filter.BlackListFilterFactory;
-import io.circleline.filter.ratelimit.RateLimitFilterFactory;
 import io.circleline.RestAPI;
+import io.circleline.filter.ratelimit.RateLimitFilterFactory;
+import io.circleline.message.ApiEndpoint;
 import org.apache.camel.builder.RouteBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +43,7 @@ public class StaticRouter extends RouteBuilder {
             //camel dsl
             from(apiEndpoint.getFromUrl())
                     .process(RateLimitFilterFactory.getInstance().getFilter(config, apiEndpoint))
-                    .process(BlackListFilterFactory.getInstance().getFilter(config, apiEndpoint))
+//                    .process(FilterFactory.getInstance().getFilter(config, apiEndpoint))
                     .to(apiEndpoint.getToUrl());
 
 //            RouteDefinition routeDefinition = from(apiEndpoint.getFromUrl());

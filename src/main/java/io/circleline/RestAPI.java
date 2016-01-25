@@ -1,7 +1,6 @@
 package io.circleline;
 
-import io.circleline.filter.ActorProcesstor;
-import io.circleline.filter.BlackListFilter;
+import io.circleline.filter.FilterFactory;
 import io.circleline.message.ApiEndpoint;
 import io.circleline.router.RestAPIRouter;
 import lombok.Data;
@@ -30,11 +29,12 @@ public class RestAPI {
     }
 
     public RestAPIRouter restAPIRouter(){
-        RestAPIRouter router = RestAPIRouter.routes(apiEndpoints)
-                .with(new ActorProcesstor());
+        final FilterFactory filterFactory = FilterFactory.getInstance();
+        RestAPIRouter router = RestAPIRouter.routes(apiEndpoints);
+//                .with(new ActorProcesstor());
 
         if(isBlackList()){
-            router.with(new BlackListFilter(blackList));
+            router.with(filterFactory.blackListFilter(blackList));
         }
         return router;
     }

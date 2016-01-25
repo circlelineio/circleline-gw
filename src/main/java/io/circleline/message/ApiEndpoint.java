@@ -13,14 +13,14 @@ public class ApiEndpoint {
     private String toUrl;
     private Long rateLimit;
 
-    public ApiEndpoint(String from, String to) {
-       this(from,to,DEFAULT_RATELIMIT);
-    }
-
     public ApiEndpoint(String from, String to, Long rateLimit) {
         URLBuilder builder = URLBuilder.build(from,to);
         this.fromUrl = builder.fromUrl();
         this.toUrl = builder.toUrl();
         this.rateLimit = rateLimit;
+    }
+
+    public boolean isRateLimit(){
+        return rateLimit>0;
     }
 }

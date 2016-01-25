@@ -1,6 +1,7 @@
 package io.circleline.router;
 
 import com.google.common.collect.Lists;
+import io.circleline.filter.FilterFactory;
 import io.circleline.message.ApiEndpoint;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
@@ -35,6 +36,7 @@ public class RestAPIRouter extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
+        final FilterFactory filterFactory = FilterFactory.getInstance();
         Iterator<ApiEndpoint> pathIterator = apiEndpoints.iterator();
 
         while (pathIterator.hasNext()) {
@@ -44,6 +46,11 @@ public class RestAPIRouter extends RouteBuilder {
             for(Processor processor:processors){
                 routeDefinition=routeDefinition.process(processor);
             }
+
+            if(apiEndpoint.isRateLimit()){
+                routeDefinition=routeDefinition.process(filterFactory.rateLimitFilter(apiEndpoint));
+            }
+
             routeDefinition.to(apiEndpoint.getToUrl());
         }
     }

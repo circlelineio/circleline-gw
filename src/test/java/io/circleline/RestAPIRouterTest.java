@@ -20,7 +20,6 @@ public class RestAPIRouterTest {
         context.start();
 
 
-
         //then
         context.stop();
     }
