@@ -3,7 +3,7 @@ package io.circleline;
 import io.circleline.filter.FilterFactory;
 import io.circleline.message.ApiEndpoint;
 import io.circleline.message.ApiEndpointStatusManager;
-import io.circleline.message.LocalApiEndpointStatusManager;
+import io.circleline.message.ApiEndpointStatusManagerFactory;
 import io.circleline.router.RestAPIRouteBuilder;
 import lombok.Data;
 import org.apache.camel.builder.RouteBuilder;
@@ -11,7 +11,7 @@ import org.apache.camel.builder.RouteBuilder;
 import java.util.List;
 
 /**
- * Created by 1001923 on 16. 1. 22..
+ * Configuration 정보를 기반으로 Camel에 필요한 정보(RouteBuilder)를 생성한다.
  */
 @Data
 public class RestAPI {
@@ -31,10 +31,18 @@ public class RestAPI {
         this.blackList=blackList;
     }
 
+    /**
+     * Configuration 정보를 기반으로 Camel RouteBuilder를 생성한다.
+     *
+     * @return camel RouteBuilder
+     */
     public RouteBuilder routeBuilder(){
         final FilterFactory filterFactory = FilterFactory.getInstance();
 
-        ApiEndpointStatusManager apiEndpointStatusManager = new LocalApiEndpointStatusManager(apiEndpoints);
+        //TODO Configuration 정보를 기반으로 local-memory, imdb, jdbc 등등을 결정해서 반환하는 Factory로 구현필요.
+        ApiEndpointStatusManager apiEndpointStatusManager =
+                ApiEndpointStatusManagerFactory.getInstance().getApiEndpointStatusManager(apiEndpoints,
+                        ApiEndpointStatusManagerFactory.PERSIST_TYPE.LOCAL);
 
         return RestAPIRouteBuilder.routes(apiEndpoints)
                 .with(filterFactory.blockFilter(apiEndpointStatusManager))
