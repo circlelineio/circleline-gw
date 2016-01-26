@@ -16,7 +16,7 @@ public class URLBuilderTest {
         //when
         URLBuilder sut = URLBuilder.build(fromUrl,toUrl);
         //then
-        assertThat(sut).isInstanceOf(URLBuilder.class);
+        assertThat(sut).isInstanceOf(URLBuilder.class); 
     }
 
     @Test
