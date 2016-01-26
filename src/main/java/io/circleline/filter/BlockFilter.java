@@ -2,7 +2,7 @@ package io.circleline.filter;
 
 import io.circleline.common.Const;
 import io.circleline.message.ApiEndpoint;
-import io.circleline.message.ApiEndpointStatusManager;
+import io.circleline.message.ApiStatusManager;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.slf4j.Logger;
@@ -15,19 +15,19 @@ public class BlockFilter implements Processor{
 
     static Logger LOG = LoggerFactory.getLogger(BlockFilter.class);
 
-    private ApiEndpointStatusManager apiEndpointStatusManager;
+    private ApiStatusManager apiStatusManager;
 
-    public BlockFilter(ApiEndpointStatusManager apiEndpointStatusManager){
-        this.apiEndpointStatusManager = apiEndpointStatusManager;
+    public BlockFilter(ApiStatusManager apiStatusManager){
+        this.apiStatusManager = apiStatusManager;
     }
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        if(apiEndpointStatusManager == null) return;
+        if(apiStatusManager == null) return;
 
-        ApiEndpoint apiEndpoint = (ApiEndpoint)exchange.getProperty(Const.API_ENDPOT);
+        ApiEndpoint apiEndpoint = (ApiEndpoint)exchange.getProperty(Const.API_ENDPOINT);
 
-        if(apiEndpointStatusManager.isBlocked(apiEndpoint)){
+        if(apiStatusManager.isBlocked(apiEndpoint)){
             LOG.info("this transaction is blocked. " + apiEndpoint);
         }
     }

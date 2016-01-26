@@ -1,9 +1,10 @@
 package io.circleline;
 
+import io.circleline.common.StatusManager;
 import io.circleline.filter.FilterFactory;
 import io.circleline.message.ApiEndpoint;
-import io.circleline.message.ApiEndpointStatusManager;
-import io.circleline.message.ApiEndpointStatusManagerFactory;
+import io.circleline.message.ApiStatusManagerFactory;
+import io.circleline.message.ApiStatusManager;
 import io.circleline.router.RestAPIRouteBuilder;
 import lombok.Data;
 import org.apache.camel.builder.RouteBuilder;
@@ -40,13 +41,12 @@ public class RestAPI {
         final FilterFactory ff = FilterFactory.getInstance();
 
         //TODO Configuration 정보를 기반으로 local-memory, imdb, jdbc 등등을 결정해서 반환하는 Factory로 구현필요.
-        ApiEndpointStatusManager apiEndpointStatusManager =
-                ApiEndpointStatusManagerFactory.getInstance().getApiEndpointStatusManager(apiEndpoints,
-                        ApiEndpointStatusManagerFactory.PERSIST_TYPE.LOCAL);
+        ApiStatusManager apiStatusManager = ApiStatusManagerFactory.getInstance(apiEndpoints)
+                .getApiStatusManager(StatusManager.LOCAL);
 
         return RestAPIRouteBuilder.routes(apiEndpoints)
-                .with(ff.blockFilter(apiEndpointStatusManager))
+                .with(ff.blockFilter(apiStatusManager))
                 .with(ff.blackListFilter(blackList))
-                .with(ff.rateLimitFilter(apiEndpointStatusManager));
+                .with(ff.rateLimitFilter(apiStatusManager));
     }
 }

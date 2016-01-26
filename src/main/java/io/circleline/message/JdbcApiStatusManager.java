@@ -3,7 +3,7 @@ package io.circleline.message;
 /**
  * JDBC를 통해 ApiEndpointStatus를 저장관리한다.
  */
-public class JdbcApiEndpointStatusManager implements ApiEndpointStatusManager {
+public class JdbcApiStatusManager implements ApiStatusManager {
     @Override
     public void block(ApiEndpoint apiEndpoint) {
         throw new UnsupportedOperationException();

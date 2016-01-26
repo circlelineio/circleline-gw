@@ -1,13 +1,8 @@
 package io.circleline.message;
 
-import io.circleline.Configuration;
-import io.circleline.RestAPI;
-import org.apache.camel.CamelContext;
-import org.apache.camel.impl.DefaultCamelContext;
 import org.junit.Test;
 
 import java.util.Arrays;
-import static org.junit.Assert.*;
 
 /**
  * Created by 1002515 on 2016. 1. 25..
@@ -19,7 +14,7 @@ public class ApiEndpointStatusManagerTest {
         //given
         ApiEndpoint api = new ApiEndpoint("http://1.1.1.1/api1","http://2.2.2.2/api2",0l);
         ApiEndpointStatusManager manager =
-                new LocalApiEndpointStatusManager(Arrays.asList(api));
+                new LocalApiStatusManager(Arrays.asList(api));
         //when
         manager.block(api);
         //than
@@ -31,7 +26,7 @@ public class ApiEndpointStatusManagerTest {
         //given
         ApiEndpoint api = new ApiEndpoint("http://1.1.1.1/api1","http://2.2.2.2/api2",0l);
         ApiEndpointStatusManager manager =
-                new LocalApiEndpointStatusManager(Arrays.asList(api));
+                new LocalApiStatusManager(Arrays.asList(api));
         //when
         manager.unblock(api);
         //than
@@ -45,7 +40,7 @@ public class ApiEndpointStatusManagerTest {
         ApiEndpoint other = new ApiEndpoint("http://2.1.1.1/api1","http://2.2.2.2/api2",0l);
 
         ApiEndpointStatusManager manager =
-                new LocalApiEndpointStatusManager(Arrays.asList(api));
+                new LocalApiStatusManager(Arrays.asList(api));
         //when,than
         manager.block(other);
     }
@@ -55,7 +50,7 @@ public class ApiEndpointStatusManagerTest {
         //given
         ApiEndpoint api = new ApiEndpoint("http://1.1.1.1/api1","http://2.2.2.2/api2",2L);
         ApiEndpointStatusManager manager =
-                new LocalApiEndpointStatusManager(Arrays.asList(api));
+                new LocalApiStatusManager(Arrays.asList(api));
 
         //when
         manager.incrementTransactionCount(api);

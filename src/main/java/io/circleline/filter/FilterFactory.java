@@ -1,7 +1,7 @@
 package io.circleline.filter;
 
 import io.circleline.filter.ratelimit.RateLimitFilter;
-import io.circleline.message.ApiEndpointStatusManager;
+import io.circleline.message.ApiStatusManager;
 import org.apache.camel.Processor;
 
 import java.util.List;
@@ -21,11 +21,11 @@ public class FilterFactory {
         return new BlackListFilter(blackList);
     }
 
-    public Processor rateLimitFilter(ApiEndpointStatusManager apiEndpointStatusManager){
-        return new RateLimitFilter(apiEndpointStatusManager);
+    public Processor rateLimitFilter(ApiStatusManager apiStatusManager){
+        return new RateLimitFilter(apiStatusManager);
     }
 
-    public Processor blockFilter(ApiEndpointStatusManager apiEndpointStatusManager){
-        return new BlockFilter(apiEndpointStatusManager);
+    public Processor blockFilter(ApiStatusManager apiStatusManager){
+        return new BlockFilter(apiStatusManager);
     }
 }

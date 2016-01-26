@@ -1,7 +1,7 @@
 package io.circleline.filter.ratelimit;
 
 import io.circleline.message.ApiEndpoint;
-import io.circleline.message.ApiEndpointStatusManager;
+import io.circleline.message.ApiStatusManager;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -14,15 +14,15 @@ public class RateLimitChecker {
 
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
-    private ApiEndpointStatusManager apiEndpointStatusManager;
+    private ApiStatusManager apiStatusManager;
 
-    public RateLimitChecker(ApiEndpointStatusManager apiEndpointStatusManager) {
-        this.apiEndpointStatusManager = apiEndpointStatusManager;
+    public RateLimitChecker(ApiStatusManager apiStatusManager) {
+        this.apiStatusManager = apiStatusManager;
         startScheduler();
     }
 
     public void incrementTransactionCount(ApiEndpoint apiEndpoint){
-        apiEndpointStatusManager.incrementTransactionCount(apiEndpoint);
+        apiStatusManager.incrementTransactionCount(apiEndpoint);
     }
 
     private void startScheduler() {
@@ -31,8 +31,8 @@ public class RateLimitChecker {
 
     class RateLimitCheckTimer implements Runnable {
         public void run() {
-            apiEndpointStatusManager.checkRateLimitAndBlock();
-            apiEndpointStatusManager.resetTransactionCount();
+            apiStatusManager.checkRateLimitAndBlock();
+            apiStatusManager.resetTransactionCount();
         }
     }
 }
