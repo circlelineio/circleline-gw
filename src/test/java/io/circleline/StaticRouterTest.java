@@ -15,7 +15,7 @@ public class StaticRouterTest {
     public void run() throws Exception{
         //given
         CamelContext context = new DefaultCamelContext();
-        context.addRoutes(new StaticRouter(config("staticroute")));
+        context.addRoutes(StaticRouter.routes(config("staticroute").apiList()));
         context.start();
         //when
 

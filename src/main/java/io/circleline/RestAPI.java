@@ -2,8 +2,10 @@ package io.circleline;
 
 import io.circleline.filter.FilterFactory;
 import io.circleline.message.ApiEndpoint;
+import io.circleline.router.APIRouter;
 import io.circleline.router.RestAPIRouter;
 import lombok.Data;
+import org.apache.camel.builder.RouteBuilder;
 
 import java.util.List;
 
@@ -28,9 +30,9 @@ public class RestAPI {
         this.blackList=blackList;
     }
 
-    public RestAPIRouter restAPIRouter(){
+    public RouteBuilder routeBuilder(){
         final FilterFactory filterFactory = FilterFactory.getInstance();
-        RestAPIRouter router = RestAPIRouter.routes(apiEndpoints);
+        APIRouter router = RestAPIRouter.routes(apiEndpoints);
 //                .with(new ActorProcesstor());
 
         if(isBlackList()){

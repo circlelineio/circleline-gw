@@ -8,12 +8,12 @@ import org.junit.Test;
 /**
  * Created by 1001923 on 16. 1. 25..
  */
-public class RestAPIRouterTest {
+public class StaticAPIRouterTest {
     @Test
-    public void restAPIRouter() throws Exception{
+    public void restAPIRouter() throws Exception {
         //given
         final Configuration config = new Configuration("restapi");
-        RouteBuilder router = new RestAPI(config).routeBuilder();
+        RouteBuilder router = new StaticAPI(config).routeBuilder();
         CamelContext context = new DefaultCamelContext();
         //when
         context.addRoutes(router);

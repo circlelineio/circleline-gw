@@ -1,6 +1,8 @@
 package io.circleline.filter.ratelimit;
 
-import io.circleline.filter.TrafficMonitor;
+import io.circleline.message.ApiEndpoint;
+import io.circleline.message.ApiEndpointStatusManager;
+import io.circleline.router.StaticRouter;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 
@@ -9,10 +11,10 @@ import org.apache.camel.Processor;
  */
 public class RateLimitFilter implements Processor {
 
-    private TrafficMonitor trafficMonitor;
+    private RateLimitChecker rateLimitChecker;
 
-    public RateLimitFilter(TrafficMonitor trafficMonitor){
-        this.trafficMonitor = trafficMonitor;
+    public RateLimitFilter(ApiEndpointStatusManager apiEndpointStatusManager){
+        this.rateLimitChecker = new RateLimitChecker(apiEndpointStatusManager);
     }
 
     /**
@@ -21,7 +23,8 @@ public class RateLimitFilter implements Processor {
      * @throws Exception
      */
     public void process(Exchange exchange) throws Exception {
-        trafficMonitor.receive(exchange);
+        ApiEndpoint apiEndpoint = (ApiEndpoint)exchange.getProperty(StaticRouter.API_ENDPOT);
+        rateLimitChecker.incrementTransactionCount(apiEndpoint);
     }
 }
 
