@@ -37,7 +37,7 @@ public class RestAPI {
      * @return camel RouteBuilder
      */
     public RouteBuilder routeBuilder(){
-        final FilterFactory filterFactory = FilterFactory.getInstance();
+        final FilterFactory ff = FilterFactory.getInstance();
 
         //TODO Configuration 정보를 기반으로 local-memory, imdb, jdbc 등등을 결정해서 반환하는 Factory로 구현필요.
         ApiEndpointStatusManager apiEndpointStatusManager =
@@ -45,8 +45,8 @@ public class RestAPI {
                         ApiEndpointStatusManagerFactory.PERSIST_TYPE.LOCAL);
 
         return RestAPIRouteBuilder.routes(apiEndpoints)
-                .with(filterFactory.blockFilter(apiEndpointStatusManager))
-                .with(filterFactory.blackListFilter(blackList))
-                .with(filterFactory.rateLimitFilter(apiEndpointStatusManager));
+                .with(ff.blockFilter(apiEndpointStatusManager))
+                .with(ff.blackListFilter(blackList))
+                .with(ff.rateLimitFilter(apiEndpointStatusManager));
     }
 }

@@ -25,8 +25,8 @@ public class RestAPIRouteBuilderTest {
         final ProducerTemplate producerTemplate = context.createProducerTemplate();
         final String result = producerTemplate.requestBody("jetty:http://0.0.0.0:8080/acme/ping", null,
                 String.class);
+        //then
         assertThat(result).contains("pong");
-
         context.stop();
     }
 }
