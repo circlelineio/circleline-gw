@@ -2,7 +2,7 @@ package io.circleline.filter;
 
 import io.circleline.common.Const;
 import io.circleline.message.ApiEndpoint;
-import io.circleline.message.ApiEndpointStatusManager;
+import io.circleline.message.ApiStatusManager;
 import io.circleline.message.LocalApiStatusManager;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Produce;
@@ -26,7 +26,7 @@ public class BlockFilterTest extends CamelTestSupport{
     protected ProducerTemplate template;
 
     private ApiEndpoint apiEndpoint = new ApiEndpoint("http://1.1.1.1","http://2.2.2.2",0L);
-    private ApiEndpointStatusManager apiEndpointStatusManager =
+    private ApiStatusManager apiEndpointStatusManager =
             new LocalApiStatusManager(Arrays.asList(apiEndpoint));
 
     @Override
