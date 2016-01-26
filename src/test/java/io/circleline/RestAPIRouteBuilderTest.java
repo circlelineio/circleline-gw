@@ -6,6 +6,8 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.junit.Test;
 
+import static org.fest.assertions.Assertions.assertThat;
+
 /**
  * Created by 1001923 on 16. 1. 25..
  */
@@ -23,7 +25,8 @@ public class RestAPIRouteBuilderTest {
         final ProducerTemplate producerTemplate = context.createProducerTemplate();
         final String result = producerTemplate.requestBody("jetty:http://0.0.0.0:8080/acme/ping", null,
                 String.class);
+        assertThat(result).contains("pong");
 
-//        context.stop();
+        context.stop();
     }
 }
