@@ -25,7 +25,7 @@ public class BlockFilter implements Processor{
     public void process(Exchange exchange) throws Exception {
         if(apiEndpointStatusManager == null) return;
 
-        ApiEndpoint apiEndpoint = (ApiEndpoint)exchange.getProperty(Const.API_ENDPOT);
+        ApiEndpoint apiEndpoint = (ApiEndpoint)exchange.getProperty(Const.API_ENDPOINT);
 
         if(apiEndpointStatusManager.isBlocked(apiEndpoint)){
             LOG.info("this transaction is blocked. " + apiEndpoint);

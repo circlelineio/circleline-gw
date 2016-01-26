@@ -23,7 +23,7 @@ public class RateLimitFilter implements Processor {
      * @throws Exception
      */
     public void process(Exchange exchange) throws Exception {
-        ApiEndpoint apiEndpoint = (ApiEndpoint)exchange.getProperty(Const.API_ENDPOT);
+        ApiEndpoint apiEndpoint = (ApiEndpoint)exchange.getProperty(Const.API_ENDPOINT);
         rateLimitChecker.incrementTransactionCount(apiEndpoint);
     }
 }

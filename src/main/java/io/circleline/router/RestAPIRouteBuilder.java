@@ -28,7 +28,7 @@ public class RestAPIRouteBuilder extends APIRouteBuilder {
     public void configure() throws Exception {
         apiEndpoints.forEach(apiEndpoint -> {
             ProcessorDefinition pd = from(apiEndpoint.getFromUrl())
-                    .setProperty(Const.API_ENDPOT)
+                    .setProperty(Const.API_ENDPOINT)
                     .constant(apiEndpoint);
             for (Processor processor : processors) {
                 pd = pd.process(processor);

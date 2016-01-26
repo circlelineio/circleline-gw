@@ -35,7 +35,7 @@ public class BlockFilterTest extends CamelTestSupport{
             public void configure() {
                 BlockFilter filter = new BlockFilter(apiEndpointStatusManager);
                 from("direct:start")
-                        .setProperty(Const.API_ENDPOT)
+                        .setProperty(Const.API_ENDPOINT)
                         .constant(apiEndpoint)
                         .process(filter)
                         .to("mock:result");
