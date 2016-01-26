@@ -4,7 +4,7 @@ import io.circleline.filter.FilterFactory;
 import io.circleline.message.ApiEndpoint;
 import io.circleline.message.ApiEndpointStatusManager;
 import io.circleline.message.LocalApiEndpointStatusManager;
-import io.circleline.router.StaticRouter;
+import io.circleline.router.StaticRouteBuilder;
 import org.apache.camel.builder.RouteBuilder;
 
 import java.util.List;
@@ -34,9 +34,10 @@ public class StaticAPI {
 
         ApiEndpointStatusManager apiEndpointStatusManager = new LocalApiEndpointStatusManager(apiEndpoints);
 
-        return StaticRouter.routes(apiEndpoints)
+        return StaticRouteBuilder.routes(apiEndpoints)
                 .with(filterFactory.blockFilter(apiEndpointStatusManager))
                 .with(filterFactory.blackListFilter(blackList))
                 .with(filterFactory.rateLimitFilter(apiEndpointStatusManager));
+//        .with(blackList&&rateLimit)
     }
 }

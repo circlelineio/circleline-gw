@@ -25,25 +25,25 @@ public class LocalApiEndpointStatusManager implements ApiEndpointStatusManager {
 
     @Override
     public void block(ApiEndpoint apiEndpoint) {
-        checkManagedApiEndpoint(apiEndpoint);
+        assertManagedApiEndpoint(apiEndpoint);
         statusMap.get(apiEndpoint).block();
     }
 
     @Override
     public void unblock(ApiEndpoint apiEndpoint) {
-        checkManagedApiEndpoint(apiEndpoint);
+        assertManagedApiEndpoint(apiEndpoint);
         statusMap.get(apiEndpoint).unblock();
     }
 
     @Override
     public boolean isBlocked(ApiEndpoint apiEndpoint) {
-        checkManagedApiEndpoint(apiEndpoint);
+        assertManagedApiEndpoint(apiEndpoint);
         return statusMap.get(apiEndpoint).isBlocked();
     }
 
     @Override
     public void incrementTransactionCount(ApiEndpoint apiEndpoint) {
-        checkManagedApiEndpoint(apiEndpoint);
+        assertManagedApiEndpoint(apiEndpoint);
         statusMap.get(apiEndpoint).incrementTransactionCount();
     }
 
@@ -54,7 +54,7 @@ public class LocalApiEndpointStatusManager implements ApiEndpointStatusManager {
 
     @Override
     public void resetTransactionCount(ApiEndpoint apiEndpoint) {
-        checkManagedApiEndpoint(apiEndpoint);
+        assertManagedApiEndpoint(apiEndpoint);
         statusMap.get(apiEndpoint).reset();
     }
 
@@ -65,7 +65,7 @@ public class LocalApiEndpointStatusManager implements ApiEndpointStatusManager {
                 .forEach(a -> a.block());
     }
 
-    private void checkManagedApiEndpoint(ApiEndpoint apiEndpoint) {
+    private void assertManagedApiEndpoint(ApiEndpoint apiEndpoint) {
         if (!statusMap.containsKey(apiEndpoint)) {
             throw new IllegalArgumentException("not managed ApiEndpoint " + apiEndpoint);
         }

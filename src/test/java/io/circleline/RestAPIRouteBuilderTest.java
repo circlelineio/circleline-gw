@@ -9,15 +9,15 @@ import org.junit.Test;
 /**
  * Created by 1001923 on 16. 1. 25..
  */
-public class RestAPIRouterTest {
+public class RestAPIRouteBuilderTest {
     @Test
     public void restAPIRouter() throws Exception{
         //given
         final Configuration config = new Configuration("restapi");
-        RouteBuilder router = new RestAPI(config).routeBuilder();
-        CamelContext context = new DefaultCamelContext();
+        RouteBuilder routerBuilder = new RestAPI(config).routeBuilder();
         //when
-        context.addRoutes(router);
+        CamelContext context = new DefaultCamelContext();
+        context.addRoutes(routerBuilder);
         context.start();
 
         final ProducerTemplate producerTemplate = context.createProducerTemplate();

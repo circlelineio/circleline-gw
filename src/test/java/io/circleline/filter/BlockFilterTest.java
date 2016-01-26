@@ -3,7 +3,7 @@ package io.circleline.filter;
 import io.circleline.message.ApiEndpoint;
 import io.circleline.message.ApiEndpointStatusManager;
 import io.circleline.message.LocalApiEndpointStatusManager;
-import io.circleline.router.StaticRouter;
+import io.circleline.router.StaticRouteBuilder;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
@@ -35,7 +35,7 @@ public class BlockFilterTest extends CamelTestSupport{
             public void configure() {
                 BlockFilter filter = new BlockFilter(apiEndpointStatusManager);
                 from("direct:start")
-                        .setProperty(StaticRouter.API_ENDPOT)
+                        .setProperty(StaticRouteBuilder.API_ENDPOT)
                         .constant(apiEndpoint)
                         .process(filter)
                         .to("mock:result");

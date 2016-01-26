@@ -8,7 +8,7 @@ import org.junit.Test;
 /**
  * Created by 1001923 on 16. 1. 25..
  */
-public class StaticAPIRouterTest {
+public class StaticAPIRouteBuilderTest {
     @Test
     public void restAPIRouter() throws Exception {
         //given

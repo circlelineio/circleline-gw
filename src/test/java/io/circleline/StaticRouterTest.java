@@ -1,6 +1,6 @@
 package io.circleline;
 
-import io.circleline.router.StaticRouter;
+import io.circleline.router.StaticRouteBuilder;
 import org.apache.camel.CamelContext;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.junit.Test;
@@ -15,7 +15,7 @@ public class StaticRouterTest {
     public void run() throws Exception{
         //given
         CamelContext context = new DefaultCamelContext();
-        context.addRoutes(StaticRouter.routes(config("staticroute").apiList()));
+        context.addRoutes(StaticRouteBuilder.routes(config("staticroute").apiList()));
         context.start();
         //when
 

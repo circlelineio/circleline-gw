@@ -12,19 +12,19 @@ import java.util.List;
 /**
  * API Gateway Router
  */
-public class StaticRouter extends APIRouter {
-    static Logger LOG = LoggerFactory.getLogger(StaticRouter.class);
+public class StaticRouteBuilder extends APIRouteBuilder {
+    static Logger LOG = LoggerFactory.getLogger(StaticRouteBuilder.class);
 
     public static final String API_ENDPOT = "circle.apiEndpoint";
 
     private final List<ApiEndpoint> apiEndpoints;
 
-    private StaticRouter(List<ApiEndpoint> apiEndpoints) {
+    private StaticRouteBuilder(List<ApiEndpoint> apiEndpoints) {
         this.apiEndpoints = apiEndpoints;
     }
 
-    public static APIRouter routes(List<ApiEndpoint> apiEndpoints) {
-        return new StaticRouter(apiEndpoints);
+    public static APIRouteBuilder routes(List<ApiEndpoint> apiEndpoints) {
+        return new StaticRouteBuilder(apiEndpoints);
     }
 
     @Override
@@ -36,9 +36,11 @@ public class StaticRouter extends APIRouter {
             ProcessorDefinition pd = from(apiEndpoint.getFromUrl())
                     .setProperty(API_ENDPOT)
                     .constant(apiEndpoint);
+
             for (Processor processor : processors) {
                 pd = pd.process(processor);
             }
+
             pd.to(apiEndpoint.getToUrl());
 
             LOG.info("API Endpoint {}", apiEndpoint);

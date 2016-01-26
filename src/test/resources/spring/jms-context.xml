@@ -27,7 +27,7 @@
         </property>
     </bean>
 
-    <bean id="router" class="io.circleline.router.StaticRouter">
+    <bean id="router" class="io.circleline.router.StaticRouteBuilder">
         <constructor-arg ref="config"/>
     </bean>
     <bean id="config" class="io.circleline.Configuration"></bean>

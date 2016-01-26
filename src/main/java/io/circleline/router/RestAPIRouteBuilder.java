@@ -13,17 +13,17 @@ import java.util.List;
 /**
  * Created by 1001923 on 16. 1. 25..
  */
-public class RestAPIRouter extends APIRouter {
-    static Logger LOG = LoggerFactory.getLogger(RestAPIRouter.class);
+public class RestAPIRouteBuilder extends APIRouteBuilder {
+    static Logger LOG = LoggerFactory.getLogger(RestAPIRouteBuilder.class);
 
     private final List<ApiEndpoint> apiEndpoints;
 
-    private RestAPIRouter(List<ApiEndpoint> apiEndpoints){
+    private RestAPIRouteBuilder(List<ApiEndpoint> apiEndpoints){
         this.apiEndpoints=apiEndpoints;
     }
 
-    public static APIRouter routes(List<ApiEndpoint> apiEndpoints){
-        return new RestAPIRouter(apiEndpoints);
+    public static APIRouteBuilder routes(List<ApiEndpoint> apiEndpoints){
+        return new RestAPIRouteBuilder(apiEndpoints);
     }
 
     @Override

@@ -9,11 +9,11 @@ import java.util.List;
 /**
  * Created by 1002515 on 2016. 1. 25..
  */
-public abstract class APIRouter extends RouteBuilder {
+public abstract class APIRouteBuilder extends RouteBuilder {
 
     protected final List<Processor> processors = Lists.newArrayList();
 
-    public APIRouter with(Processor processor){
+    public APIRouteBuilder with(Processor processor){
         processors.add(processor);
         return this;
     }
