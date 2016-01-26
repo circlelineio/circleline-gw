@@ -1,65 +1,47 @@
 package io.circleline.router;
 
-
-import io.circleline.Configuration;
-import io.circleline.RestAPI;
-import io.circleline.filter.ratelimit.RateLimitFilterFactory;
 import io.circleline.message.ApiEndpoint;
-import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.Processor;
+import org.apache.camel.model.ProcessorDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * API Gateway Router
  */
-@Component
-public class StaticRouter extends RouteBuilder {
+public class StaticRouter extends APIRouter {
     static Logger LOG = LoggerFactory.getLogger(StaticRouter.class);
-    @Autowired
-    private Configuration config;
 
-    public StaticRouter(){}
+    public static final String API_ENDPOT = "circle.apiEndpoint";
 
-    public StaticRouter(Configuration config){
-        this.config = config;
+    private final List<ApiEndpoint> apiEndpoints;
+
+    private StaticRouter(List<ApiEndpoint> apiEndpoints) {
+        this.apiEndpoints = apiEndpoints;
     }
 
-    /**
-     * API Gateway 설정정보를 기반으로 Camel Route 구성.
-     * @throws Exception
-     */
+    public static APIRouter routes(List<ApiEndpoint> apiEndpoints) {
+        return new StaticRouter(apiEndpoints);
+    }
+
     @Override
     public void configure() throws Exception {
-        RestAPI api = new RestAPI(config);
-        Iterator<ApiEndpoint> pathIterator = api.getApiEndpoints().iterator();
+        Iterator<ApiEndpoint> pathIterator = apiEndpoints.iterator();
 
         while (pathIterator.hasNext()) {
             ApiEndpoint apiEndpoint = pathIterator.next();
-            LOG.info("API Endpoint {}", apiEndpoint);
-            //camel dsl
-            from(apiEndpoint.getFromUrl())
-                    .process(RateLimitFilterFactory.getInstance().getFilter(config, apiEndpoint))
-//                    .process(FilterFactory.getInstance().getFilter(config, apiEndpoint))
-                    .to(apiEndpoint.getToUrl());
+            ProcessorDefinition pd = from(apiEndpoint.getFromUrl())
+                    .setProperty(API_ENDPOT)
+                    .constant(apiEndpoint);
+            for (Processor processor : processors) {
+                pd = pd.process(processor);
+            }
+            pd.to(apiEndpoint.getToUrl());
 
-//            RouteDefinition routeDefinition = from(apiEndpoint.getFromUrl());
-//            routeDefinition = setFilters(routeDefinition,api);
-//            routeDefinition.to(apiEndpoint.getToUrl());
+            LOG.info("API Endpoint {}", apiEndpoint);
         }
     }
-
-//    private RouteDefinition setFilters(RouteDefinition routeDef, RestAPI api){
-//        Iterator<Processor> iterator = api.getFilters().iterator();
-//        RouteDefinition currentRouteDef = routeDef;
-//        while(iterator.hasNext()){
-//            Processor apiEndpoint = iterator.next();
-//            currentRouteDef = currentRouteDef.process(apiEndpoint);
-//        }
-//        return currentRouteDef;
-//    }
-
 }

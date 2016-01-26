@@ -1,7 +1,7 @@
 package io.circleline;
 
-import io.circleline.router.RestAPIRouter;
 import org.apache.camel.CamelContext;
+import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.DefaultCamelContext;
 
 /**
@@ -10,7 +10,7 @@ import org.apache.camel.impl.DefaultCamelContext;
 public class Application {
     public static void main(String[] args) throws Exception {
         final Configuration config = new Configuration();
-        RestAPIRouter sut = new RestAPI(config).restAPIRouter();
+        final RouteBuilder sut = new RestAPI(config).routeBuilder();
         CamelContext context = new DefaultCamelContext();
 
         context.addRoutes(sut);

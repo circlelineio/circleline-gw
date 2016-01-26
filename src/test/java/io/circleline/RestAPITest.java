@@ -1,6 +1,6 @@
 package io.circleline;
 
-import io.circleline.router.RestAPIRouter;
+import org.apache.camel.builder.RouteBuilder;
 import org.junit.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -15,9 +15,9 @@ public class RestAPITest {
         final Configuration config = new Configuration("restapi");
         final RestAPI sut = new RestAPI(config);
         //when
-        RestAPIRouter restAPIRouter = sut.restAPIRouter();
+        RouteBuilder routeBuilder = sut.routeBuilder();
         //then
-        assertThat(restAPIRouter).isInstanceOf(RestAPIRouter.class);
+        assertThat(routeBuilder).isInstanceOf(RouteBuilder.class);
     }
 
     @Test
