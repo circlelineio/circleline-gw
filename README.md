@@ -1,4 +1,3 @@
-activator-akka-java-seed
-========================
+# circleline-gw
 
-A minimal seed template for an Akka with Java build
+Super lightweight RestAPI Gateway
