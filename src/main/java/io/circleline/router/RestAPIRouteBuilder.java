@@ -1,9 +1,8 @@
 package io.circleline.router;
 
-import io.circleline.filter.FilterFactory;
 import io.circleline.message.ApiEndpoint;
 import org.apache.camel.Processor;
-import org.apache.camel.model.RouteDefinition;
+import org.apache.camel.model.ProcessorDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,6 +14,8 @@ import java.util.List;
  */
 public class RestAPIRouteBuilder extends APIRouteBuilder {
     static Logger LOG = LoggerFactory.getLogger(RestAPIRouteBuilder.class);
+
+    public static final String API_ENDPOT = "circle.apiEndpoint";
 
     private final List<ApiEndpoint> apiEndpoints;
 
@@ -28,22 +29,21 @@ public class RestAPIRouteBuilder extends APIRouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        final FilterFactory filterFactory = FilterFactory.getInstance();
         Iterator<ApiEndpoint> pathIterator = apiEndpoints.iterator();
 
         while (pathIterator.hasNext()) {
             ApiEndpoint apiEndpoint = pathIterator.next();
+            ProcessorDefinition pd = from(apiEndpoint.getFromUrl())
+                    .setProperty(API_ENDPOT)
+                    .constant(apiEndpoint);
+
+            for (Processor processor : processors) {
+                pd = pd.process(processor);
+            }
+
+            pd.to(apiEndpoint.getToUrl());
+
             LOG.info("API Endpoint {}", apiEndpoint);
-            RouteDefinition routeDefinition = from(apiEndpoint.getFromUrl());
-            for(Processor processor:processors){
-                routeDefinition = routeDefinition.process(processor);
-            }
-
-            if(apiEndpoint.isRateLimit()){
-                routeDefinition = routeDefinition.process(filterFactory.rateLimitFilter(null));
-            }
-
-            routeDefinition.to(apiEndpoint.getToUrl());
         }
     }
 }

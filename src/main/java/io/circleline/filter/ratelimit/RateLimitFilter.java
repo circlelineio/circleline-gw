@@ -2,7 +2,7 @@ package io.circleline.filter.ratelimit;
 
 import io.circleline.message.ApiEndpoint;
 import io.circleline.message.ApiEndpointStatusManager;
-import io.circleline.router.StaticRouteBuilder;
+import io.circleline.router.RestAPIRouteBuilder;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 
@@ -23,7 +23,7 @@ public class RateLimitFilter implements Processor {
      * @throws Exception
      */
     public void process(Exchange exchange) throws Exception {
-        ApiEndpoint apiEndpoint = (ApiEndpoint)exchange.getProperty(StaticRouteBuilder.API_ENDPOT);
+        ApiEndpoint apiEndpoint = (ApiEndpoint)exchange.getProperty(RestAPIRouteBuilder.API_ENDPOT);
         rateLimitChecker.incrementTransactionCount(apiEndpoint);
     }
 }
