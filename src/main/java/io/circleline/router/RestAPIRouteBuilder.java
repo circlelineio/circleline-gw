@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 /**
- * Created by 1001923 on 16. 1. 25..
+ * Camel RouteBuilder 구현체
  */
 public class RestAPIRouteBuilder extends APIRouteBuilder {
     static Logger LOG = LoggerFactory.getLogger(RestAPIRouteBuilder.class);
@@ -26,16 +26,31 @@ public class RestAPIRouteBuilder extends APIRouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        apiEndpoints.forEach(apiEndpoint -> {
+        initErrorHandler();
+        initRoute();
+    }
 
+    @Override
+    protected void initErrorHandler(){
+        errorHandlers.forEach((clazz,errorHandler) ->
+            onException(clazz).handled(true).process(errorHandler).stop()
+        );
+    }
+
+    @Override
+    protected void initRoute() {
+        // make route
+        apiEndpoints.forEach(apiEndpoint -> {
+            //from
             ProcessorDefinition pd =
                     from(apiEndpoint.getFromUrl())
                         .setProperty(Const.API_ENDPOINT).constant(apiEndpoint);
-
+            //processor
             for (Processor processor : processors) {
                 pd = pd.process(processor);
             }
 
+            //to
             pd.to(apiEndpoint.getToUrl());
             LOG.info("API Endpoint {}", apiEndpoint);
         });

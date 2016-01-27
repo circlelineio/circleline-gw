@@ -1,5 +1,6 @@
 package io.circleline.filter;
 
+import io.circleline.filter.error.BlackListIpException;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.slf4j.Logger;
@@ -36,13 +37,16 @@ public class BlackListFilter implements Processor {
      * @throws Exception
      */
     public void process(Exchange exchange) throws Exception {
+
+        LOG.info("BlackListFilter " + exchange);
+
         if(blackList.isEmpty()) return;
         HttpServletRequest req = exchange.getIn().getBody(HttpServletRequest.class);
         if(req != null){
             String remoteAddr = req.getRemoteAddr();
-//            int remotePort = req.getRemotePort();
             if(blackList.contains(remoteAddr)){
                 LOG.info("This address for request in blacklist. {}",remoteAddr);
+                throw new BlackListIpException(remoteAddr + "is in blacklist.");
             }
         }
     }

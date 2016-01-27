@@ -17,7 +17,7 @@ import java.util.Arrays;
 /**
  * Created by 1002515 on 2016. 1. 25..
  */
-public class BlockFilterTest extends CamelTestSupport{
+public class BlockFilterTest extends CamelTestSupport {
 
     @EndpointInject(uri = "mock:result")
     protected MockEndpoint resultEndpoint;
@@ -25,7 +25,7 @@ public class BlockFilterTest extends CamelTestSupport{
     @Produce(uri = "direct:start")
     protected ProducerTemplate template;
 
-    private ApiEndpoint apiEndpoint = new ApiEndpoint("http://1.1.1.1","http://2.2.2.2",0L);
+    private ApiEndpoint apiEndpoint = new ApiEndpoint("http://1.1.1.1", "http://2.2.2.2", 0L);
     private ApiStatusManager apiEndpointStatusManager =
             new LocalApiStatusManager(Arrays.asList(apiEndpoint));
 
@@ -49,8 +49,9 @@ public class BlockFilterTest extends CamelTestSupport{
         apiEndpointStatusManager.block(apiEndpoint);
         //when
         resultEndpoint.expectedMessageCount(0);
-        template.sendBody("dummy");
+        Object result = template.requestBody("dummy");
         //than
         resultEndpoint.assertIsSatisfied();
+        assertNotNull(result);
     }
 }

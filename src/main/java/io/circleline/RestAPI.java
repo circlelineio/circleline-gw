@@ -1,7 +1,8 @@
 package io.circleline;
 
 import io.circleline.common.StatusManager;
-import io.circleline.filter.FilterFactory;
+import io.circleline.filter.*;
+import io.circleline.filter.error.*;
 import io.circleline.message.ApiEndpoint;
 import io.circleline.message.ApiStatusManagerFactory;
 import io.circleline.message.ApiStatusManager;
@@ -9,6 +10,7 @@ import io.circleline.router.RestAPIRouteBuilder;
 import lombok.Data;
 import org.apache.camel.builder.RouteBuilder;
 
+import java.net.ConnectException;
 import java.util.List;
 
 /**
@@ -45,8 +47,14 @@ public class RestAPI {
                 .getApiStatusManager(StatusManager.LOCAL);
 
         return RestAPIRouteBuilder.routes(apiEndpoints)
+                // add Processor
                 .with(ff.blockFilter(apiStatusManager))
                 .with(ff.blackListFilter(blackList))
-                .with(ff.rateLimitFilter(apiStatusManager));
+                .with(ff.rateLimitFilter(apiStatusManager))
+                // add ErrorHandler TODO ErrorHandler로 Factory로 생성?
+                .withError(BlockedApiException.class, new UnauthorizedErrorHandler())
+                .withError(BlackListIpException.class, new UnauthorizedErrorHandler())
+                .withError(ConnectException.class, new ConnectToErrorHandler())
+                .withError(Exception.class,new DefaultErrorHandler());
     }
 }
