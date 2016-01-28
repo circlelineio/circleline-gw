@@ -7,7 +7,7 @@ import java.util.Arrays;
 /**
  * Created by 1002515 on 2016. 1. 25..
  */
-public class ApiStatusManagerTest {
+public class ApiStatusTest {
 
     @Test
     public void testBlock(){
@@ -16,9 +16,9 @@ public class ApiStatusManagerTest {
         ApiStatusManager manager =
                 new LocalApiStatusManager(Arrays.asList(api));
         //when
-        manager.block(api);
+        manager.getApiStatus(api).block();
         //than
-        assertEquals(true,manager.isBlocked(api));
+        assertEquals(true, manager.getApiStatus(api).isBlocked());
     }
 
     @Test
@@ -28,9 +28,9 @@ public class ApiStatusManagerTest {
         ApiStatusManager manager =
                 new LocalApiStatusManager(Arrays.asList(api));
         //when
-        manager.unblock(api);
+        manager.getApiStatus(api).unblock();
         //than
-        assertEquals(false,manager.isBlocked(api));
+        assertEquals(false, manager.getApiStatus(api).isBlocked());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -42,7 +42,7 @@ public class ApiStatusManagerTest {
         ApiStatusManager manager =
                 new LocalApiStatusManager(Arrays.asList(api));
         //when,than
-        manager.block(other);
+        manager.getApiStatus(other).block();
     }
 
     @Test
@@ -52,13 +52,17 @@ public class ApiStatusManagerTest {
         ApiStatusManager manager =
                 new LocalApiStatusManager(Arrays.asList(api));
 
+        ApiStatus status = manager.getApiStatus(api);
+
         //when
-        manager.incrementTransactionCount(api);
-        manager.incrementTransactionCount(api);
-        manager.incrementTransactionCount(api);
-        manager.checkRateLimitAndBlock();
+        status.incrementTransactionCount();
+        status.incrementTransactionCount();
+        status.incrementTransactionCount();
+        if(status.isOverRateLimit()){
+            status.block();
+        }
 
         //than
-        assertEquals(true,manager.isBlocked(api));
+        assertEquals(true,status.isBlocked());
     }
 }

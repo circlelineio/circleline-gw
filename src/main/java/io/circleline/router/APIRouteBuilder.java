@@ -3,6 +3,7 @@ package io.circleline.router;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.camel.Processor;
+import org.apache.camel.Service;
 import org.apache.camel.builder.RouteBuilder;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public abstract class APIRouteBuilder extends RouteBuilder {
 
     protected final List<Processor> processors = Lists.newArrayList();
     protected final Map<Class,Processor> errorHandlers = Maps.newHashMap();
+    protected final Map<String,Service> services = Maps.newHashMap();
 
     public APIRouteBuilder with(Processor processor){
         processors.add(processor);
@@ -32,6 +34,12 @@ public abstract class APIRouteBuilder extends RouteBuilder {
     public APIRouteBuilder withError(Class clazz, Processor errorHandler){
         errorHandlers.put(clazz, errorHandler);
         return this;
+    }
+
+    @Override
+    public void configure() throws Exception {
+        initErrorHandler();
+        initRoute();
     }
 
     protected abstract void initErrorHandler();

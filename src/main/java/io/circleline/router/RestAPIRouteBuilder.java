@@ -25,12 +25,6 @@ public class RestAPIRouteBuilder extends APIRouteBuilder {
     }
 
     @Override
-    public void configure() throws Exception {
-        initErrorHandler();
-        initRoute();
-    }
-
-    @Override
     protected void initErrorHandler(){
         errorHandlers.forEach((clazz,errorHandler) ->
             onException(clazz).handled(true).process(errorHandler).stop()

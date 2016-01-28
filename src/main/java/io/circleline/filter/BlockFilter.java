@@ -17,17 +17,20 @@ import org.apache.camel.Processor;
  * 블럭된 API가 아니면 다음 Filter를 처리한다.
  */
 public class BlockFilter implements Processor{
-    private ApiStatusManager apiStatusManager;
-
-    public BlockFilter(ApiStatusManager apiStatusManager){
-        this.apiStatusManager = apiStatusManager;
-    }
 
     @Override
     public void process(Exchange exchange) throws Exception {
+
+        ApiStatusManager apiStatusManager =
+                exchange.getContext()
+                        .getRegistry()
+                        .lookupByNameAndType(Const.API_STATUS, ApiStatusManager.class);
+
         if(apiStatusManager == null) return;
-        ApiEndpoint apiEndpoint = exchange.getProperty(Const.API_ENDPOINT,ApiEndpoint.class);
-        if(apiStatusManager.isBlocked(apiEndpoint)){
+
+        ApiEndpoint apiEndpoint = exchange.getProperty(Const.API_ENDPOINT, ApiEndpoint.class);
+
+        if(apiStatusManager.getApiStatus(apiEndpoint).isBlocked()){
             throw new BlockedApiException("blocked api : " + apiEndpoint.getFrom());
         }
     }

@@ -33,7 +33,7 @@ public class BlockFilterTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() {
         return new RouteBuilder() {
             public void configure() {
-                BlockFilter filter = new BlockFilter(apiEndpointStatusManager);
+                BlockFilter filter = new BlockFilter();
                 from("direct:start")
                         .setProperty(Const.API_ENDPOINT)
                         .constant(apiEndpoint)
@@ -46,7 +46,7 @@ public class BlockFilterTest extends CamelTestSupport {
     @Test
     public void testBlockFilter() throws Exception {
         //given
-        apiEndpointStatusManager.block(apiEndpoint);
+        apiEndpointStatusManager.getApiStatus(apiEndpoint).block();
         //when
         resultEndpoint.expectedMessageCount(0);
         Object result = template.requestBody("dummy");

@@ -4,14 +4,17 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.DefaultCamelContext;
 
+import java.rmi.registry.Registry;
+
 /**
  * Created by 1001923 on 16. 1. 14..
  */
 public class Application {
     public static void main(String[] args) throws Exception {
         final Configuration config = new Configuration();
-        final RouteBuilder sut = new RestAPI(config).routeBuilder();
-        CamelContext context = new DefaultCamelContext();
+        final RestAPI api = new RestAPI(config);
+        final RouteBuilder sut = api.routeBuilder();
+        CamelContext context = new DefaultCamelContext(api.getRegistry());
 
         context.addRoutes(sut);
         context.start();
