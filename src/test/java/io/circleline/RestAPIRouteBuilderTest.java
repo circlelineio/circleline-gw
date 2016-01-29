@@ -2,7 +2,6 @@ package io.circleline;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
-import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.junit.Test;
 
@@ -16,14 +15,15 @@ public class RestAPIRouteBuilderTest {
     public void restAPIRouter() throws Exception{
         //given
         final Configuration config = new Configuration("restapi");
-        RouteBuilder routerBuilder = new RestAPI(config).routeBuilder();
+        final RestAPI restAPI = new RestAPI(config);
         //when
-        CamelContext context = new DefaultCamelContext();
-        context.addRoutes(routerBuilder);
+        CamelContext context = new DefaultCamelContext(restAPI.registry());
+        context.addRoutes(restAPI.routeBuilder());
         context.start();
 
         final ProducerTemplate producerTemplate = context.createProducerTemplate();
-        final String result = producerTemplate.requestBody("jetty:http://0.0.0.0:8080/acme/ping", null,
+        final String result = producerTemplate
+                .requestBody("jetty:http://0.0.0.0:8080/acme/ping", null,
                 String.class);
         //then
         assertThat(result).contains("pong");

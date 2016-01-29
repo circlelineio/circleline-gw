@@ -32,11 +32,7 @@ public class RestAPI {
 
     public RestAPI(Configuration config){
         this(config.apiList(), config.rateLimit(), config.blackList());
-        if(config.apiStatusRepository()!=null) {
-            this.setStatusType(StatusRepositoryType.valueOf(config.apiStatusRepository()));
-        }else{
-            this.setStatusType(StatusRepositoryType.LOCAL);
-        }
+        this.setStatusType(config.apiStatusRepository());
     }
 
     public RestAPI(List<ApiEndpoint> apiEndpoints, Long rateLimit, List<String> blackList){
@@ -49,7 +45,6 @@ public class RestAPI {
         ApiStatusManager apiStatus =
                 ApiStatusManagerFactory.createApiStatusManagerFactory(apiEndpoints, statusType)
                 .getApiStatusManager();
-
         RateLimitChecker rateLimitChecker = new RateLimitChecker(apiStatus, 1, TimeUnit.SECONDS);
 
         SimpleRegistry registry = new SimpleRegistry();

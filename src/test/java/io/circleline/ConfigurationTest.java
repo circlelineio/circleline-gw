@@ -1,5 +1,6 @@
 package io.circleline;
 
+import io.circleline.common.StatusRepositoryType;
 import io.circleline.message.ApiEndpoint;
 import org.junit.Test;
 
@@ -16,9 +17,9 @@ public class ConfigurationTest {
         //given
         final Configuration sut = new Configuration("apistatus");
         //when
-        final String apiStatusRepository = sut.apiStatusRepository();
+        final StatusRepositoryType statusRepositoryType = sut.apiStatusRepository();
         //then
-        assertThat(apiStatusRepository).isEqualTo("local");
+        assertThat(statusRepositoryType).isEqualTo(StatusRepositoryType.LOCAL);
     }
 
     @Test

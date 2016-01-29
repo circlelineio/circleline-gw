@@ -3,6 +3,7 @@ package io.circleline;
 import com.google.common.collect.Lists;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
+import io.circleline.common.StatusRepositoryType;
 import io.circleline.message.ApiEndpoint;
 import org.springframework.stereotype.Component;
 
@@ -67,7 +68,17 @@ public class Configuration {
         return apiEndpoints;
     }
 
-    public String apiStatusRepository(){
-        return conf.getString(APISTATUS_REPOSITORY);
+    /**
+     * api 상태를 어디에 유지할지 정의한다.
+     *
+     * @return
+     */
+    public StatusRepositoryType apiStatusRepository(){
+        final String apiStatusStr = conf.getString(APISTATUS_REPOSITORY);
+        if(apiStatusStr!=null) {
+            return StatusRepositoryType.valueOf(apiStatusStr.toUpperCase());
+        }else{
+            return StatusRepositoryType.LOCAL;
+        }
     }
 }
