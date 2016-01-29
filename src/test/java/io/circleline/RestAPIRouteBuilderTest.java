@@ -17,14 +17,14 @@ public class RestAPIRouteBuilderTest {
         final Configuration config = new Configuration("restapi");
         final RestAPI restAPI = new RestAPI(config);
         //when
-        CamelContext context = new DefaultCamelContext(restAPI.registry());
+        CamelContext context = new DefaultCamelContext(restAPI.apiStatusManager());
         context.addRoutes(restAPI.routeBuilder());
         context.start();
 
         final ProducerTemplate producerTemplate = context.createProducerTemplate();
         final String result = producerTemplate
                 .requestBody("jetty:http://0.0.0.0:8080/acme/ping", null,
-                String.class);
+                        String.class);
         //then
         assertThat(result).contains("pong");
         context.stop();

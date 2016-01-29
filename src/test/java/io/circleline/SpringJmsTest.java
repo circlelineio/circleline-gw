@@ -16,5 +16,6 @@ public class SpringJmsTest {
     public void run() throws Exception{
         Main main = new Main();
         main.run();
+        main.stop();
     }
 }

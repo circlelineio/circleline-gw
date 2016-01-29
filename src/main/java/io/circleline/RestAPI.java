@@ -2,19 +2,17 @@ package io.circleline;
 
 import io.circleline.common.Const;
 import io.circleline.common.StatusRepositoryType;
-import io.circleline.filter.*;
-import io.circleline.filter.error.*;
+import io.circleline.filter.FilterFactory;
 import io.circleline.filter.ratelimit.RateLimitChecker;
 import io.circleline.message.ApiEndpoint;
-import io.circleline.message.ApiStatusManagerFactory;
 import io.circleline.message.ApiStatusManager;
+import io.circleline.message.ApiStatusManagerFactory;
 import io.circleline.router.RestAPIRouteBuilder;
 import lombok.Data;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.SimpleRegistry;
 import org.apache.camel.spi.Registry;
 
-import java.net.ConnectException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -31,17 +29,19 @@ public class RestAPI {
     private StatusRepositoryType statusType;
 
     public RestAPI(Configuration config){
-        this(config.apiList(), config.rateLimit(), config.blackList());
-        this.setStatusType(config.apiStatusRepository());
+        this(config.apiList(), config.rateLimit(), config.blackList(), config.apiStatusRepository());
     }
 
-    public RestAPI(List<ApiEndpoint> apiEndpoints, Long rateLimit, List<String> blackList){
+    public RestAPI(List<ApiEndpoint> apiEndpoints, Long rateLimit,
+                   List<String> blackList,
+                   StatusRepositoryType statusType){
         this.apiEndpoints = apiEndpoints;
         this.rateLimit = rateLimit;
         this.blackList = blackList;
+        this.statusType = statusType;
     }
 
-    public Registry registry(){
+    public Registry apiStatusManager(){
         ApiStatusManager apiStatus =
                 ApiStatusManagerFactory.createApiStatusManagerFactory(apiEndpoints, statusType)
                 .getApiStatusManager();
@@ -68,9 +68,10 @@ public class RestAPI {
                 .with(ff.blackListFilter(blackList))
                 .with(ff.rateLimitFilter())
                 // add ErrorHandler TODO ErrorHandler로 Factory로 생성?
-                .withError(BlockedApiException.class, new UnauthorizedErrorHandler())
-                .withError(BlackListIpException.class, new UnauthorizedErrorHandler())
-                .withError(ConnectException.class, new ConnectToErrorHandler())
-                .withError(Exception.class,new DefaultErrorHandler());
+//                .withError(BlockedApiException.class, new UnauthorizedErrorHandler())
+//                .withError(BlackListIpException.class, new UnauthorizedErrorHandler())
+//                .withError(ConnectException.class, new ConnectToErrorHandler())
+//                .withError(Exception.class,new DefaultErrorHandler())
+                ;
     }
 }
