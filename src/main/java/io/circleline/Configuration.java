@@ -19,6 +19,7 @@ public class Configuration {
     static final String LISTEN_PATH = "fromUrl";
     static final String TARGET_URL = "toUrl";
     static final String RATE_LIMIT = "rateLimit";
+    static final String APISTATUS_REPOSITORY = "apistatus.repository";
 
     private final Config conf;
 
@@ -64,5 +65,9 @@ public class Configuration {
                     config.hasPath(RATE_LIMIT) ? config.getLong(RATE_LIMIT) : rateLimit()));
         });
         return apiEndpoints;
+    }
+
+    public String apiStatusRepository(){
+        return conf.getString(APISTATUS_REPOSITORY);
     }
 }

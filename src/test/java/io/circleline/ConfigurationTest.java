@@ -12,6 +12,16 @@ import static org.fest.assertions.Assertions.assertThat;
  */
 public class ConfigurationTest {
     @Test
+    public void apiStatusRepository() throws Exception{
+        //given
+        final Configuration sut = new Configuration("apistatus");
+        //when
+        final String apiStatusRepository = sut.apiStatusRepository();
+        //then
+        assertThat(apiStatusRepository).isEqualTo("local");
+    }
+
+    @Test
     public void apiEndpoint() throws Exception{
         //given
         final Configuration sut = new Configuration("apiendpoint");
