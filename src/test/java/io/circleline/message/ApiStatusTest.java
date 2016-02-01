@@ -1,8 +1,10 @@
 package io.circleline.message;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
+
 import java.util.Arrays;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by 1002515 on 2016. 1. 25..
@@ -33,7 +35,7 @@ public class ApiStatusTest {
         assertEquals(false, manager.getApiStatus(api).isBlocked());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NullPointerException.class)
     public void testBlockStatusException(){
         //given
         ApiEndpoint api = new ApiEndpoint("http://1.1.1.1/api1","http://2.2.2.2/api2",0l);

@@ -48,7 +48,7 @@ public class BlockFilterTest extends CamelTestSupport {
         //given
         apiEndpointStatusManager.getApiStatus(apiEndpoint).block();
         //when
-        resultEndpoint.expectedMessageCount(0);
+        resultEndpoint.expectedMessageCount(1);
         Object result = template.requestBody("dummy");
         //than
         resultEndpoint.assertIsSatisfied();
