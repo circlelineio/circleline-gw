@@ -5,9 +5,7 @@ import io.circleline.common.StatusRepositoryType;
 import io.circleline.filter.FilterFactory;
 import io.circleline.filter.error.*;
 import io.circleline.filter.ratelimit.RateLimitChecker;
-import io.circleline.message.ApiEndpoint;
-import io.circleline.message.ApiStatusManager;
-import io.circleline.message.ApiStatusManagerFactory;
+import io.circleline.message.*;
 import io.circleline.router.RestAPIRouteBuilder;
 import lombok.Data;
 import org.apache.camel.builder.RouteBuilder;
@@ -44,16 +42,26 @@ public class RestAPI {
     }
 
     public Registry apiStatusManager(){
-        ApiStatusManager apiStatus =
-                ApiStatusManagerFactory.createApiStatusManagerFactory(apiEndpoints, statusType)
-                .getApiStatusManager();
-        RateLimitChecker rateLimitChecker = new RateLimitChecker(apiStatus, 1, TimeUnit.SECONDS);
+//        ApiStatusManager apiStatusManager =
+//                ApiStatusManagerFactory.createApiStatusManagerFactory(apiEndpoints, statusType)
+//                .getApiStatusManager();
+        final ApiStatusManager apiStatusManager = makeApiStatusManager();
+        RateLimitChecker rateLimitChecker = new RateLimitChecker(apiStatusManager, 1, TimeUnit.SECONDS);
 
         SimpleRegistry registry = new SimpleRegistry();
-        registry.put(Const.API_STATUS,apiStatus);
+        registry.put(Const.API_STATUS,apiStatusManager);
         registry.put(Const.RATELIMIT_CHECKER,rateLimitChecker);
 
         return registry;
+    }
+
+    private ApiStatusManager makeApiStatusManager(){
+        switch (statusType){
+            case LOCAL: return new LocalApiStatusManager(apiEndpoints);
+//            case IMDB: return new JdbcApiStatus(apiEndpoints);
+            case JDBC: throw new IllegalArgumentException("not implemented type");
+            default: return new LocalApiStatusManager(apiEndpoints);
+        }
     }
 
     /**

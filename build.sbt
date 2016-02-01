@@ -26,6 +26,8 @@ libraryDependencies ++= Seq(
   // Logging
   "org.slf4j" % "slf4j-api" % "1.7.13",
   "ch.qos.logback" % "logback-classic" % "1.1.3",
+  // H2 DB
+  "com.h2database" % "h2" % "1.4.191",
   // Testing
   "junit" % "junit" % "4.12" % "test",
   "org.easytesting" % "fest-assert" % "1.4",

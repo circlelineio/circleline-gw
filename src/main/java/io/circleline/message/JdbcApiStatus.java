@@ -7,6 +7,10 @@ import java.util.List;
  */
 public class JdbcApiStatus implements ApiStatusManager {
 
+    public JdbcApiStatus(ApiEndpoint apiEndpoint){
+
+    }
+
     @Override
     public List<ApiStatus> allApiStatus() {
         throw new UnsupportedOperationException("");

@@ -20,10 +20,12 @@ public class LocalApiStatusManager implements ApiStatusManager {
                 .collect(toMap(a -> a, a -> new LocalApiStatus(a)));
     }
 
+    @Override
     public List<ApiStatus> allApiStatus(){
         return Collections.unmodifiableList(new ArrayList<>(statusMap.values()));
     }
 
+    @Override
     public ApiStatus getApiStatus(ApiEndpoint apiEndpoint){
         return statusMap.get(apiEndpoint);
     }
