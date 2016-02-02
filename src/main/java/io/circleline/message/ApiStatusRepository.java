@@ -8,4 +8,5 @@ import java.util.List;
 public interface ApiStatusRepository {
     public List<ApiStatus> allApiStatus();
     public ApiStatus getApiStatus(ApiEndpoint apiEndpoint);
+    public void persist(ApiStatus apiStatus);
 }

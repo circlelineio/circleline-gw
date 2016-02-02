@@ -14,11 +14,18 @@ public class JdbcApiStatusRepository implements ApiStatusRepository {
 
     @Override
     public List<ApiStatus> allApiStatus() {
+        //TODO EntityManager를 통해 queryList를 한다.
         throw new UnsupportedOperationException("");
     }
 
     @Override
     public ApiStatus getApiStatus(ApiEndpoint apiEndpoint) {
+        //TODO EntityManager를 통해 query한다.
         throw new UnsupportedOperationException("");
+    }
+
+    @Override
+    public void persist(ApiStatus apiStatus) {
+        //TODO EntityManager를 통해 apiStatus를 persist를 한다.
     }
 }

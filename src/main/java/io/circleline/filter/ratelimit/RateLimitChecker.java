@@ -40,6 +40,10 @@ public class RateLimitChecker {
 
             statuses.stream()
                     .forEach(s -> s.resetTransactionCount());
+
+            statuses.stream()
+                    .forEach(s -> apiStatusManager.repository().persist(s));
+
         }
     }
 }

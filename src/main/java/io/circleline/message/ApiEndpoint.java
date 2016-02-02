@@ -2,20 +2,22 @@ package io.circleline.message;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * API Gateway 경로 정보
  */
 @Data
-public class ApiEndpoint {
-    private static final Long DEFAULT_RATELIMIT = 0l;
+public class ApiEndpoint implements Serializable{
+    private static final long DEFAULT_RATELIMIT = 0l;
 
     private String from;
     private String to;
     private String fromUrl;
     private String toUrl;
-    private Long rateLimit;
+    private long rateLimit;
 
-    public ApiEndpoint(String from, String to, Long rateLimit) {
+    public ApiEndpoint(String from, String to, long rateLimit) {
         URLBuilder builder = URLBuilder.build(from,to);
         this.from = from;
         this.to = to;

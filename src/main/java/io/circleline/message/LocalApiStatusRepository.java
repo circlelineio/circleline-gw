@@ -29,4 +29,9 @@ public class LocalApiStatusRepository implements ApiStatusRepository {
     public ApiStatus getApiStatus(ApiEndpoint apiEndpoint){
         return statusMap.get(apiEndpoint);
     }
+
+    @Override
+    public void persist(ApiStatus apiStatus) {
+        statusMap.put(apiStatus.getApiEndpoint(),apiStatus);
+    }
 }

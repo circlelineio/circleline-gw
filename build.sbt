@@ -21,6 +21,9 @@ libraryDependencies ++= Seq(
   "org.apache.activemq" % "activemq-broker" % "5.13.0",
   "org.apache.activemq" % "activemq-client" % "5.13.0",
   "org.apache.activemq" % "activemq-camel" % "5.13.0",
+  // JCache (hazelcast)
+  "javax.cache" % "cache-api" % "1.0.0",
+  "com.hazelcast" % "hazelcast" % "3.6",
   // Configuration
   "com.typesafe" % "config" % "1.3.0",
   // Logging

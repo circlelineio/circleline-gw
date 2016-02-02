@@ -2,40 +2,40 @@ package io.circleline.message;
 
 import lombok.Data;
 
-import java.util.concurrent.atomic.AtomicLong;
+import java.io.Serializable;
 
 /**
  * Created by 1002515 on 2016. 1. 28..
  */
 @Data
-public class ApiStatus {
+public class ApiStatus implements Serializable{
     private ApiEndpoint apiEndpoint;
-    private AtomicLong transactionCount;
+    private long transactionCount;
     private boolean blocked = false;
 
     public ApiStatus(ApiEndpoint apiEndpoint) {
         this.apiEndpoint = apiEndpoint;
-        this.transactionCount = new AtomicLong(0);
+        this.transactionCount = 0L;
     }
 
-//    public ApiEndpoint getApiEndpoint() {
-//        return apiEndpoint;
-//    }
+    public ApiEndpoint getApiEndpoint() {
+        return apiEndpoint;
+    }
 
     public long getTransactionCount() {
-        return transactionCount.get();
+        return transactionCount;
     }
 
     public boolean isOverRateLimit(){
-        return transactionCount.get() >= apiEndpoint.getRateLimit();
+        return transactionCount >= apiEndpoint.getRateLimit();
     }
 
     public long incrementTransactionCount(){
-        return transactionCount.incrementAndGet();
+        return ++transactionCount;
     }
 
     public void resetTransactionCount(){
-        transactionCount.set(0);
+        transactionCount = 0;
     }
 
     public void block(){
@@ -51,6 +51,6 @@ public class ApiStatus {
     }
 
     public void setTransactionCount(long transactionCount) {
-        this.transactionCount.set(transactionCount);
+        this.transactionCount = transactionCount;
     }
 }
