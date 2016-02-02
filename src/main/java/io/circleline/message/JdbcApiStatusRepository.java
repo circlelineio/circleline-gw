@@ -5,10 +5,11 @@ import java.util.List;
 /**
  * JDBC를 통해 ApiEndpointStatus를 저장관리한다.
  */
-public class JdbcApiStatus implements ApiStatusManager {
+public class JdbcApiStatusRepository implements ApiStatusRepository {
 
-    public JdbcApiStatus(ApiEndpoint apiEndpoint){
+    public JdbcApiStatusRepository(){}
 
+    public JdbcApiStatusRepository(List<ApiEndpoint> apiEndpoints){
     }
 
     @Override

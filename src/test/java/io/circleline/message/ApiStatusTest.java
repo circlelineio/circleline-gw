@@ -15,8 +15,8 @@ public class ApiStatusTest {
     public void testBlock(){
         //given
         ApiEndpoint api = new ApiEndpoint("http://1.1.1.1/api1","http://2.2.2.2/api2",0l);
-        ApiStatusManager manager =
-                new LocalApiStatusManager(Arrays.asList(api));
+        ApiStatusRepository manager =
+                new LocalApiStatusRepository(Arrays.asList(api));
         //when
         manager.getApiStatus(api).block();
         //than
@@ -27,8 +27,8 @@ public class ApiStatusTest {
     public void testUnblock(){
         //given
         ApiEndpoint api = new ApiEndpoint("http://1.1.1.1/api1","http://2.2.2.2/api2",0l);
-        ApiStatusManager manager =
-                new LocalApiStatusManager(Arrays.asList(api));
+        ApiStatusRepository manager =
+                new LocalApiStatusRepository(Arrays.asList(api));
         //when
         manager.getApiStatus(api).unblock();
         //than
@@ -41,8 +41,8 @@ public class ApiStatusTest {
         ApiEndpoint api = new ApiEndpoint("http://1.1.1.1/api1","http://2.2.2.2/api2",0l);
         ApiEndpoint other = new ApiEndpoint("http://2.1.1.1/api1","http://2.2.2.2/api2",0l);
 
-        ApiStatusManager manager =
-                new LocalApiStatusManager(Arrays.asList(api));
+        ApiStatusRepository manager =
+                new LocalApiStatusRepository(Arrays.asList(api));
         //when,than
         manager.getApiStatus(other).block();
     }
@@ -51,8 +51,8 @@ public class ApiStatusTest {
     public void testCheckRateLimitAndBlock() throws Exception {
         //given
         ApiEndpoint api = new ApiEndpoint("http://1.1.1.1/api1","http://2.2.2.2/api2",2L);
-        ApiStatusManager manager =
-                new LocalApiStatusManager(Arrays.asList(api));
+        ApiStatusRepository manager =
+                new LocalApiStatusRepository(Arrays.asList(api));
 
         ApiStatus status = manager.getApiStatus(api);
 

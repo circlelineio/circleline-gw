@@ -10,14 +10,14 @@ import static java.util.stream.Collectors.*;
  * Singlemode에서는 이 Manager를 사용하며
  * Clustermode일 경우에는 ClusterApiEndpointStatusManager를 사용한다.
  */
-public class LocalApiStatusManager implements ApiStatusManager {
+public class LocalApiStatusRepository implements ApiStatusRepository {
 
     private Map<ApiEndpoint, ApiStatus> statusMap;
 
-    public LocalApiStatusManager(List<ApiEndpoint> apiEndpoints) {
+    public LocalApiStatusRepository(List<ApiEndpoint> apiEndpoints) {
         statusMap = apiEndpoints
                 .stream()
-                .collect(toMap(a -> a, a -> new LocalApiStatus(a)));
+                .collect(toMap(a -> a, a -> new ApiStatus(a)));
     }
 
     @Override

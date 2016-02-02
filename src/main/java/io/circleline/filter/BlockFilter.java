@@ -24,13 +24,13 @@ public class BlockFilter implements Processor{
         ApiStatusManager apiStatusManager =
                 exchange.getContext()
                         .getRegistry()
-                        .lookupByNameAndType(Const.API_STATUS, ApiStatusManager.class);
+                        .lookupByNameAndType(Const.API_STATUS_Manager, ApiStatusManager.class);
 
         if(apiStatusManager == null) return;
 
         ApiEndpoint apiEndpoint = exchange.getProperty(Const.API_ENDPOINT, ApiEndpoint.class);
 
-        if(apiStatusManager.getApiStatus(apiEndpoint).isBlocked()){
+        if(apiStatusManager.repository().getApiStatus(apiEndpoint).isBlocked()){
             throw new BlockedApiException("blocked api : " + apiEndpoint.getFrom());
         }
     }

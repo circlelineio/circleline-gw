@@ -13,7 +13,6 @@ import java.util.concurrent.TimeUnit;
  * Created by 1002515 on 2016. 1. 18..
  */
 public class RateLimitChecker {
-
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     private ApiStatusManager apiStatusManager;
@@ -24,7 +23,7 @@ public class RateLimitChecker {
     }
 
     public void incrementTransactionCount(ApiEndpoint apiEndpoint){
-        apiStatusManager.getApiStatus(apiEndpoint).incrementTransactionCount();
+        apiStatusManager.repository().getApiStatus(apiEndpoint).incrementTransactionCount();
     }
 
     private void startScheduler(long delay, TimeUnit timeUnit) {
@@ -33,7 +32,7 @@ public class RateLimitChecker {
 
     class RateLimitCheckTimer implements Runnable {
         public void run() {
-            List<ApiStatus> statuses = apiStatusManager.allApiStatus();
+            List<ApiStatus> statuses = apiStatusManager.repository().allApiStatus();
 
             statuses.stream()
                     .filter(s -> s.isOverRateLimit())

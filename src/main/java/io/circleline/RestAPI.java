@@ -42,26 +42,14 @@ public class RestAPI {
     }
 
     public Registry apiStatusManager(){
-//        ApiStatusManager apiStatusManager =
-//                ApiStatusManagerFactory.createApiStatusManagerFactory(apiEndpoints, statusType)
-//                .getApiStatusManager();
-        final ApiStatusManager apiStatusManager = makeApiStatusManager();
+        final ApiStatusManager apiStatusManager = new ApiStatusManager(apiEndpoints, statusType);
         RateLimitChecker rateLimitChecker = new RateLimitChecker(apiStatusManager, 1, TimeUnit.SECONDS);
 
         SimpleRegistry registry = new SimpleRegistry();
-        registry.put(Const.API_STATUS,apiStatusManager);
+        registry.put(Const.API_STATUS_Manager, apiStatusManager);
         registry.put(Const.RATELIMIT_CHECKER,rateLimitChecker);
 
         return registry;
-    }
-
-    private ApiStatusManager makeApiStatusManager(){
-        switch (statusType){
-            case LOCAL: return new LocalApiStatusManager(apiEndpoints);
-//            case IMDB: return new JdbcApiStatus(apiEndpoints);
-            case JDBC: throw new IllegalArgumentException("not implemented type");
-            default: return new LocalApiStatusManager(apiEndpoints);
-        }
     }
 
     /**
