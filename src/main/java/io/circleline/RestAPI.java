@@ -60,6 +60,7 @@ public class RestAPI {
     public RouteBuilder routeBuilder(){
         final FilterFactory ff = FilterFactory.getInstance();
 
+        //TODO apiStatusManager 작업을 here로 옮긴후 filter 생성자 파라미터로 넣어주기.
         return RestAPIRouteBuilder.routes(apiEndpoints)
                 // add Processor
                 .with(ff.blockFilter())
