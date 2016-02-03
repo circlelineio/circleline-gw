@@ -33,6 +33,8 @@ public class JCacheApiStatusRepository implements ApiStatusRepository {
      */
     private void initCache(){
         CacheManager manager = Caching.getCachingProvider().getCacheManager();
+        // TODO 만기설정 확인필요. 0로
+        // TODO 전략설정 확인필요. 어인떤 값이 어떤 식으로 유지되는지.
         MutableConfiguration<ApiEndpoint, ApiStatus> configuration = new MutableConfiguration();
         cache = manager.createCache("cache", configuration);
     }
