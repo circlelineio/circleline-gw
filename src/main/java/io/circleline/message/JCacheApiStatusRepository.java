@@ -24,26 +24,27 @@ public class JCacheApiStatusRepository implements ApiStatusRepository {
 
     public JCacheApiStatusRepository(List<ApiEndpoint> apiEndpoints) {
         apiEndpointSet = apiEndpoints.stream().collect(Collectors.toSet());
-        initCache();
-        putAllApiStatus(apiEndpoints);
     }
 
     /**
      * 캐쉬를 초기화한다.
      */
-    private void initCache(){
+    @Override
+    public void initRepository(){
         CacheManager manager = Caching.getCachingProvider().getCacheManager();
         // TODO 만기설정 확인필요. 0로
         // TODO 전략설정 확인필요. 어인떤 값이 어떤 식으로 유지되는지.
         MutableConfiguration<ApiEndpoint, ApiStatus> configuration = new MutableConfiguration();
         cache = manager.createCache("cache", configuration);
+
+        putAllApiStatus(apiEndpointSet);
     }
 
     /**
      * ApiEndpoint의  상태를 캐쉬에 저장한다.
      * @param apiEndpoints
      */
-    private void putAllApiStatus(List<ApiEndpoint> apiEndpoints){
+    private void putAllApiStatus(Set<ApiEndpoint> apiEndpoints){
         apiEndpoints.forEach(a -> cache.put(a,new ApiStatus(a)));
     }
 

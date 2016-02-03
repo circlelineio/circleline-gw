@@ -21,6 +21,9 @@ public class LocalApiStatusRepository implements ApiStatusRepository {
     }
 
     @Override
+    public void initRepository() {}
+
+    @Override
     public List<ApiStatus> allApiStatus(){
         return Collections.unmodifiableList(new ArrayList<>(statusMap.values()));
     }

@@ -28,4 +28,9 @@ public class JdbcApiStatusRepository implements ApiStatusRepository {
     public void persist(ApiStatus apiStatus) {
         //TODO EntityManager를 통해 apiStatus를 persist를 한다.
     }
+
+    @Override
+    public void initRepository() {
+
+    }
 }

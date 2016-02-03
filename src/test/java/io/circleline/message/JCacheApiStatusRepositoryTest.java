@@ -20,6 +20,7 @@ public class JCacheApiStatusRepositoryTest {
     public static void initRepository(){
         ae1 = new ApiEndpoint("http://1.1.1.1/api1","http://2.2.2.2/api2",RATE_LIMIT_COUNT);
         sut = new JCacheApiStatusRepository(Arrays.asList(ae1));
+        sut.initRepository();
     }
 
     @Test

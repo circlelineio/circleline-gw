@@ -30,7 +30,7 @@ public class BlockFilter implements Processor{
 
         ApiEndpoint apiEndpoint = exchange.getProperty(Const.API_ENDPOINT, ApiEndpoint.class);
 
-        if(apiStatusManager.repository().getApiStatus(apiEndpoint).isBlocked()){
+        if(apiStatusManager.getApiStatus(apiEndpoint).isBlocked()){
             throw new BlockedApiException("blocked api : " + apiEndpoint.getFrom());
         }
     }

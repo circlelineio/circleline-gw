@@ -23,7 +23,7 @@ public class RateLimitChecker {
     }
 
     public void incrementTransactionCount(ApiEndpoint apiEndpoint){
-        apiStatusManager.repository().getApiStatus(apiEndpoint).incrementTransactionCount();
+        apiStatusManager.getApiStatus(apiEndpoint).incrementTransactionCount();
     }
 
     private void startScheduler(long delay, TimeUnit timeUnit) {
@@ -32,18 +32,14 @@ public class RateLimitChecker {
 
     class RateLimitCheckTimer implements Runnable {
         public void run() {
-            List<ApiStatus> statuses = apiStatusManager.repository().allApiStatus();
-
+            List<ApiStatus> statuses = apiStatusManager.allApiStatus();
             statuses.stream()
                     .filter(s -> s.isOverRateLimit())
                     .forEach(s -> s.block());
-
             statuses.stream()
                     .forEach(s -> s.resetTransactionCount());
-
             statuses.stream()
-                    .forEach(s -> apiStatusManager.repository().persist(s));
-
+                    .forEach(s -> apiStatusManager.persist(s));
         }
     }
 }

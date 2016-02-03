@@ -7,11 +7,12 @@ import java.util.List;
 /**
  * Created by 1001923 on 16. 2. 2..
  */
-public class ApiStatusManager {
+public class ApiStatusManager{
     private ApiStatusRepository apiStatusRepository;
 
     public ApiStatusManager(List<ApiEndpoint> apiEndpoints, StatusRepositoryType statusType){
         this.apiStatusRepository = apiStatusRepository(apiEndpoints,statusType);
+        this.apiStatusRepository.initRepository();
     }
 
     private ApiStatusRepository apiStatusRepository(List<ApiEndpoint> apiEndpoints,StatusRepositoryType statusType){
@@ -23,7 +24,15 @@ public class ApiStatusManager {
         }
     }
 
-    public ApiStatusRepository repository(){
-        return apiStatusRepository;
+    public ApiStatus getApiStatus(ApiEndpoint apiEndpoint){
+        return apiStatusRepository.getApiStatus(apiEndpoint);
+    }
+
+    public List<ApiStatus> allApiStatus(){
+        return apiStatusRepository.allApiStatus();
+    }
+
+    public void persist(ApiStatus apiStatus){
+        apiStatusRepository.persist(apiStatus);
     }
 }
