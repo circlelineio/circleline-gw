@@ -4,6 +4,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.stream.LongStream;
 
 import static org.fest.assertions.Assertions.assertThat;
 /**
@@ -12,90 +13,95 @@ import static org.fest.assertions.Assertions.assertThat;
 public class JCacheApiStatusRepositoryTest {
 
     private static ApiEndpoint ae1;
-    private static ApiStatusRepository asr;
+    private static ApiStatusRepository sut;
+    private static final Long RATE_LIMIT_COUNT = 5l;
 
     @BeforeClass
     public static void initRepository(){
-        ae1 = new ApiEndpoint("http://1.1.1.1/api1","http://2.2.2.2/api2",5L);
-        asr = new JCacheApiStatusRepository(Arrays.asList(ae1));
+        ae1 = new ApiEndpoint("http://1.1.1.1/api1","http://2.2.2.2/api2",RATE_LIMIT_COUNT);
+        sut = new JCacheApiStatusRepository(Arrays.asList(ae1));
     }
 
     @Test
-    public void testGetApiStatus() throws Exception{
-        //given
-        ApiStatus apiStatus = asr.getApiStatus(ae1);
-        //when
+    public void getApiStatus() throws Exception{
+        //given,when
+        ApiStatus apiStatus = sut.getApiStatus(ae1);
         //than
         assertThat(apiStatus).isNotNull();
+        assertThat(apiStatus.getApiEndpoint().getFrom()).isEqualTo(ae1.getFrom());
     }
 
     @Test
-    public void testIsOverRateLimit() throws Exception {
+    public void incrementTransactionCount() throws Exception {
         //given
-        ApiStatus apiStatus = asr.getApiStatus(ae1);
-        //when
-        apiStatus.incrementTransactionCount();
-        apiStatus.incrementTransactionCount();
-        apiStatus.incrementTransactionCount();
-        apiStatus.incrementTransactionCount();
-        apiStatus.incrementTransactionCount(); // overRateLimit
-        asr.persist(apiStatus);
-
-        //than
-        assertThat(asr.getApiStatus(ae1).isOverRateLimit()).isEqualTo(true);
-    }
-
-    @Test
-    public void testIncrementTransactionCount() throws Exception {
-        //given
-        ApiStatus apiStatus = asr.getApiStatus(ae1);
+        ApiStatus apiStatus = sut.getApiStatus(ae1);
         long currentTransactionCount = apiStatus.getTransactionCount();
         //when
         apiStatus.incrementTransactionCount();
-        asr.persist(apiStatus);
+        sut.persist(apiStatus);
         //than
-        assertThat(asr.getApiStatus(ae1).getTransactionCount()).isEqualTo(currentTransactionCount + 1);
+        assertThat(sut.getApiStatus(ae1).getTransactionCount()).isEqualTo(currentTransactionCount + 1);
     }
 
     @Test
-    public void testResetTransactionCount() throws Exception {
+    public void isOverRateLimitTrue() throws Exception {
         //given
-        ApiStatus apiStatus = asr.getApiStatus(ae1);
-        apiStatus.incrementTransactionCount();
-        asr.persist(apiStatus);
-
-        //when
-        apiStatus = asr.getApiStatus(ae1);
+        ApiStatus apiStatus = sut.getApiStatus(ae1);
         apiStatus.resetTransactionCount();
-        asr.persist(apiStatus);
-
+        sut.persist(apiStatus);
+        //when
+        LongStream.range(0, RATE_LIMIT_COUNT).forEach(i -> apiStatus.incrementTransactionCount());
+        sut.persist(apiStatus);
         //than
-        assertThat(asr.getApiStatus(ae1).getTransactionCount()).isEqualTo(0);
+        assertThat(sut.getApiStatus(ae1).isOverRateLimit()).isTrue();
     }
 
     @Test
-    public void testBlock() throws Exception {
+    public void isOverRateLimitFalse() throws Exception {
         //given
-        ApiStatus apiStatus = asr.getApiStatus(ae1);
+        ApiStatus apiStatus = sut.getApiStatus(ae1);
+        apiStatus.resetTransactionCount();
+        sut.persist(apiStatus);
+        //when
+        LongStream.range(0, RATE_LIMIT_COUNT - 1).forEach(i -> apiStatus.incrementTransactionCount());
+        sut.persist(apiStatus);
+        //than
+        assertThat(sut.getApiStatus(ae1).isOverRateLimit()).isFalse();
+    }
 
+    @Test
+    public void resetTransactionCount() throws Exception {
+        //given
+        ApiStatus apiStatus = sut.getApiStatus(ae1);
+        apiStatus.incrementTransactionCount();
+        sut.persist(apiStatus);
+        //when
+        apiStatus = sut.getApiStatus(ae1);
+        apiStatus.resetTransactionCount();
+        sut.persist(apiStatus);
+        //than
+        assertThat(sut.getApiStatus(ae1).getTransactionCount()).isZero();
+    }
+
+    @Test
+    public void block() throws Exception {
+        //given
+        ApiStatus apiStatus = sut.getApiStatus(ae1);
         //when
         apiStatus.block();
-        asr.persist(apiStatus);
-
+        sut.persist(apiStatus);
         //than
-        assertThat(asr.getApiStatus(ae1).isBlocked()).isEqualTo(true);
+        assertThat(sut.getApiStatus(ae1).isBlocked()).isTrue();
     }
 
     @Test
-    public void testUnblock() throws Exception {
+    public void unblock() throws Exception {
         //given
-        ApiStatus apiStatus = asr.getApiStatus(ae1);
-
+        ApiStatus apiStatus = sut.getApiStatus(ae1);
         //when
         apiStatus.unblock();
-        asr.persist(apiStatus);
-
+        sut.persist(apiStatus);
         //than
-        assertThat(asr.getApiStatus(ae1).isBlocked()).isEqualTo(false);
+        assertThat(sut.getApiStatus(ae1).isBlocked()).isFalse();
     }
 }
