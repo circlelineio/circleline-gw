@@ -17,7 +17,7 @@ public class RestAPIRouteBuilderTest {
         final Configuration config = new Configuration("restapi");
         final RestAPI restAPI = new RestAPI(config);
         //when
-        CamelContext context = new DefaultCamelContext(restAPI.apiStatusManager());
+        CamelContext context = new DefaultCamelContext();
         context.addRoutes(restAPI.routeBuilder());
         context.start();
 

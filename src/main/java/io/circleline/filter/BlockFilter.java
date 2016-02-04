@@ -18,15 +18,14 @@ import org.apache.camel.Processor;
  */
 public class BlockFilter implements Processor{
 
+    private ApiStatusManager apiStatusManager;
+
+    public BlockFilter(ApiStatusManager apiStatusManager){
+        this.apiStatusManager = apiStatusManager;
+    }
+
     @Override
     public void process(Exchange exchange) throws Exception {
-
-        ApiStatusManager apiStatusManager =
-                exchange.getContext()
-                        .getRegistry()
-                        .lookupByNameAndType(Const.API_STATUS_Manager, ApiStatusManager.class);
-
-        if(apiStatusManager == null) return;
 
         ApiEndpoint apiEndpoint = exchange.getProperty(Const.API_ENDPOINT, ApiEndpoint.class);
 

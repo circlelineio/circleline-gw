@@ -10,17 +10,17 @@ import org.apache.camel.Processor;
  */
 public class RateLimitFilter implements Processor {
 
+    private RateLimitChecker rateLimitChecker;
+
+    public RateLimitFilter(RateLimitChecker rateLimitChecker){
+        this.rateLimitChecker = rateLimitChecker;
+    }
     /**
      * @param exchange
      * @throws Exception
      */
     public void process(Exchange exchange) throws Exception {
         ApiEndpoint apiEndpoint = exchange.getProperty(Const.API_ENDPOINT, ApiEndpoint.class);
-
-        RateLimitChecker rateLimitChecker = exchange.getContext()
-                .getRegistry()
-                .lookupByNameAndType(Const.RATELIMIT_CHECKER, RateLimitChecker.class);
-
         rateLimitChecker.incrementTransactionCount(apiEndpoint);
     }
 }

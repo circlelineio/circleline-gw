@@ -1,9 +1,10 @@
 package io.circleline.filter;
 
 import io.circleline.common.Const;
-import io.circleline.message.ApiEndpoint;
-import io.circleline.message.ApiStatusRepository;
-import io.circleline.message.LocalApiStatusRepository;
+import io.circleline.common.StatusRepositoryType;
+import io.circleline.filter.error.BlockedApiException;
+import io.circleline.filter.error.UnauthorizedErrorHandler;
+import io.circleline.message.*;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
@@ -26,14 +27,20 @@ public class BlockFilterTest extends CamelTestSupport {
     protected ProducerTemplate template;
 
     private ApiEndpoint apiEndpoint = new ApiEndpoint("http://1.1.1.1", "http://2.2.2.2", 0L);
-    private ApiStatusRepository apiEndpointStatusManager =
-            new LocalApiStatusRepository(Arrays.asList(apiEndpoint));
+    private ApiStatusManager apiStatusManager =
+            new ApiStatusManager(Arrays.asList(apiEndpoint), StatusRepositoryType.LOCAL);
 
     @Override
     protected RouteBuilder createRouteBuilder() {
         return new RouteBuilder() {
             public void configure() {
-                BlockFilter filter = new BlockFilter();
+
+                onException(BlockedApiException.class)
+                        .handled(true)
+                        .process(new UnauthorizedErrorHandler())
+                        .stop();
+
+                BlockFilter filter = new BlockFilter(apiStatusManager);
                 from("direct:start")
                         .setProperty(Const.API_ENDPOINT)
                         .constant(apiEndpoint)
@@ -46,12 +53,13 @@ public class BlockFilterTest extends CamelTestSupport {
     @Test
     public void testBlockFilter() throws Exception {
         //given
-        apiEndpointStatusManager.getApiStatus(apiEndpoint).block();
+        ApiStatus apiStatus = apiStatusManager.getApiStatus(apiEndpoint);
+        apiStatus.block();
+        apiStatusManager.persist(apiStatus);
+        resultEndpoint.expectedMessageCount(0);
         //when
-        resultEndpoint.expectedMessageCount(1);
-        Object result = template.requestBody("dummy");
+        template.requestBody("dummy");
         //than
         resultEndpoint.assertIsSatisfied();
-        assertNotNull(result);
     }
 }

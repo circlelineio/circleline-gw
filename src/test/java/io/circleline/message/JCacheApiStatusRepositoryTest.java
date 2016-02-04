@@ -1,5 +1,6 @@
 package io.circleline.message;
 
+import io.circleline.filter.error.BlockedApiException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

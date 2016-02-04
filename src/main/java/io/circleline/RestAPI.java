@@ -41,17 +41,6 @@ public class RestAPI {
         this.statusType = statusType;
     }
 
-    public Registry apiStatusManager(){
-        final ApiStatusManager apiStatusManager = new ApiStatusManager(apiEndpoints, statusType);
-        RateLimitChecker rateLimitChecker = new RateLimitChecker(apiStatusManager, 1, TimeUnit.SECONDS);
-
-        SimpleRegistry registry = new SimpleRegistry();
-        registry.put(Const.API_STATUS_Manager, apiStatusManager);
-        registry.put(Const.RATELIMIT_CHECKER,rateLimitChecker);
-
-        return registry;
-    }
-
     /**
      * Configuration 정보를 기반으로 Camel RouteBuilder를 생성한다.
      *
@@ -60,12 +49,15 @@ public class RestAPI {
     public RouteBuilder routeBuilder(){
         final FilterFactory ff = FilterFactory.getInstance();
 
+        final ApiStatusManager apiStatusManager = new ApiStatusManager(apiEndpoints, statusType);
+        final RateLimitChecker rateLimitChecker = new RateLimitChecker(apiStatusManager, 1, TimeUnit.SECONDS);
+
         //TODO apiStatusManager 작업을 here로 옮긴후 filter 생성자 파라미터로 넣어주기.
         return RestAPIRouteBuilder.routes(apiEndpoints)
                 // add Processor
-                .with(ff.blockFilter())
+                .with(ff.blockFilter(apiStatusManager))
                 .with(ff.blackListFilter(blackList))
-                .with(ff.rateLimitFilter())
+                .with(ff.rateLimitFilter(rateLimitChecker))
                 // add ErrorHandler TODO ErrorHandler로 Factory로 생성?
                 .withError(BlockedApiException.class, new UnauthorizedErrorHandler())
                 .withError(BlackListIpException.class, new UnauthorizedErrorHandler())

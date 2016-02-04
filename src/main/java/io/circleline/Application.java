@@ -11,7 +11,7 @@ public class Application {
         final Configuration config = new Configuration();
         final RestAPI restAPI = new RestAPI(config);
 
-        CamelContext context = new DefaultCamelContext(restAPI.apiStatusManager());
+        CamelContext context = new DefaultCamelContext();
         context.addRoutes(restAPI.routeBuilder());
         context.start();
 
