@@ -33,6 +33,7 @@ libraryDependencies ++= Seq(
   "com.h2database" % "h2" % "1.4.191",
   // Testing
   "junit" % "junit" % "4.12" % "test",
+  "org.mockito" % "mockito-all" % "1.10.19" % "test",
   "org.easytesting" % "fest-assert" % "1.4",
   "com.google.guava" % "guava" % "19.0",
   "org.projectlombok" % "lombok" % "1.16.6",
