@@ -42,8 +42,4 @@ public class BasicAuth implements Authentication {
                 userPassword.substring(0,index),
                 userPassword.substring(index)};
     }
-
-
-
-
 }

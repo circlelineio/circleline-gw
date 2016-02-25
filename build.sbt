@@ -8,7 +8,6 @@ libraryDependencies ++= Seq(
   // Spring
   "org.springframework" % "spring-context" % "4.2.4.RELEASE",
   "org.springframework" % "spring-test" % "4.2.4.RELEASE",
-
   // Akka
   "com.typesafe.akka" %% "akka-actor" % "2.3.11",
   "com.typesafe.akka" %% "akka-testkit" % "2.3.11" % "test",
@@ -31,8 +30,11 @@ libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.1.3",
   // H2 DB
   "com.h2database" % "h2" % "1.4.191",
+  // apache
+  "commons-codec" % "commons-codec" % "1.9",
+  "commons-lang" % "commons-lang" % "2.6",
   // Testing
-  "junit" % "junit" % "4.12" % "test",
+  "junit" % "junit" % "4.11" % "test",
   "org.mockito" % "mockito-all" % "1.10.19" % "test",
   "org.easytesting" % "fest-assert" % "1.4",
   "com.google.guava" % "guava" % "19.0",
