@@ -23,15 +23,15 @@ public class HmacAuth implements Authentication {
         if(credentials == null)
             throw new UnauthorizedException("'Authentication' header must not be null");
 
-        String signatureFromHeader = signatureFromHeader(request);
-
         Signature signature = Signature.from(credentials);
-        if (!signature.signature().equals(signatureFromHeader)) {
-            throw new UnauthorizedException("invalid signature");
-        }
 
         if(!isValidKeyId(signature.keyId())){
             throw new UnauthorizedException("invalid keyId");
+        }
+
+        String signatureFromDateHeader = generateSignatureBasedOnDateHeader(request);
+        if (!signature.signature().equals(signatureFromDateHeader)) {
+            throw new UnauthorizedException("invalid signature");
         }
     }
 
@@ -40,7 +40,7 @@ public class HmacAuth implements Authentication {
         return false;
     }
 
-    private String signatureFromHeader(HttpServletRequest request){
+    private String generateSignatureBasedOnDateHeader(HttpServletRequest request){
         String date = request.getHeader("date");
         String signedStr = HmacUtils.hmacSha1Hex("secret".getBytes(), ("date:" + date).getBytes());
         return Base64.getEncoder().encodeToString(signedStr.getBytes());
