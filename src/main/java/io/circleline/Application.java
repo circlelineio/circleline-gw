@@ -1,7 +1,11 @@
 package io.circleline;
 
+import io.circleline.management.keys.KeyManagementFileService;
+import io.circleline.router.ManagementAPIRouteBuilder;
 import org.apache.camel.CamelContext;
 import org.apache.camel.impl.DefaultCamelContext;
+import org.apache.camel.impl.SimpleRegistry;
+import org.apache.camel.spi.Registry;
 
 /**
  * Created by 1001923 on 16. 1. 14..
@@ -11,8 +15,9 @@ public class Application {
         final Configuration config = new Configuration();
         final RestAPI restAPI = new RestAPI(config);
 
-        CamelContext context = new DefaultCamelContext();
+        CamelContext context = new DefaultCamelContext(initRegisty());
         context.addRoutes(restAPI.routeBuilder());
+        context.addRoutes(ManagementAPIRouteBuilder.routes());
         context.start();
 
 //        Main main = new Main();
@@ -28,4 +33,12 @@ public class Application {
 //        system.awaitTermination();
 //        context.stop();
     }
+
+    private static Registry initRegisty(){
+        SimpleRegistry registry = new SimpleRegistry();
+        registry.put("keyManagementService",new KeyManagementFileService());
+
+        return registry;
+    }
+
 }

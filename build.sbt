@@ -33,6 +33,11 @@ libraryDependencies ++= Seq(
   // apache
   "commons-codec" % "commons-codec" % "1.9",
   "commons-lang" % "commons-lang" % "2.6",
+  // Redis
+  "redis.clients" % "jedis" % "2.4.2",
+  // mongodb
+  "org.mongodb" % "mongo-java-driver" % "3.2.2",
+  "com.google.code" % "morphia" % "0.91",
   // Testing
   "junit" % "junit" % "4.11" % "test",
   "org.mockito" % "mockito-all" % "1.10.19" % "test",
